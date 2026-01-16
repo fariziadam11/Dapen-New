@@ -1,0 +1,63 @@
+<?php
+
+namespace App\Models\Sdm;
+
+use App\Models\Traits\HasDocumentFeatures;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class Pks extends Model
+{
+    use SoftDeletes, HasDocumentFeatures;
+    protected $table = 'sdm_pks';
+    protected $fillable = ['id_divisi', 'nomor', 'nama', 'mulai', 'akhir', 'kategori', 'file', 'file_name', 'lokasi', 'version', 'sifat_dokumen', 'created_by', 'updated_by', 'deleted_by'];
+    protected $casts = ['mulai' => 'date', 'akhir' => 'date'];
+}
+
+class Rarus extends Model
+{
+    use SoftDeletes, HasDocumentFeatures;
+    protected $table = 'sdm_rarus';
+    protected $fillable = ['id_divisi', 'tanggal', 'perihal', 'kategori', 'file', 'file_name', 'lokasi', 'version', 'sifat_dokumen', 'created_by', 'updated_by', 'deleted_by'];
+    protected $casts = ['tanggal' => 'date'];
+}
+
+class Peraturan extends Model
+{
+    use SoftDeletes, HasDocumentFeatures;
+    protected $table = 'sdm_peraturan';
+    protected $fillable = ['id_divisi', 'nomor', 'tanggal', 'perihal', 'kategori', 'file', 'file_name', 'lokasi', 'version', 'sifat_dokumen', 'created_by', 'updated_by', 'deleted_by'];
+    protected $casts = ['tanggal' => 'date'];
+}
+
+class RekrutMasuk extends Model
+{
+    use SoftDeletes, HasDocumentFeatures;
+    protected $table = 'sdm_rekrut_masuk';
+    protected $fillable = ['id_divisi', 'nik', 'nama', 'status', 'perihal', 'tanggal', 'file', 'file_name', 'lokasi', 'version', 'sifat_dokumen', 'created_by', 'updated_by', 'deleted_by'];
+    protected $casts = ['tanggal' => 'date'];
+}
+
+class CapegPegrus extends Model
+{
+    use SoftDeletes, HasDocumentFeatures;
+    protected $table = 'sdm_capeg_pegrus';
+    protected $fillable = ['id_divisi', 'nik', 'nama', 'status', 'perihal', 'tanggal', 'file', 'file_name', 'lokasi', 'version', 'sifat_dokumen', 'created_by', 'updated_by', 'deleted_by'];
+    protected $casts = ['tanggal' => 'date'];
+}
+
+class PromosiMutasi extends Model
+{
+    use SoftDeletes, HasDocumentFeatures;
+    protected $table = 'sdm_promosi_mutasi';
+    protected $fillable = ['id_divisi', 'nik', 'nama', 'status', 'perihal', 'tanggal', 'file', 'file_name', 'lokasi', 'version', 'sifat_dokumen', 'created_by', 'updated_by', 'deleted_by'];
+    protected $casts = ['tanggal' => 'date'];
+}
+
+class NaikGaji extends Model
+{
+    use SoftDeletes, HasDocumentFeatures;
+    protected $table = 'sdm_naik_gaji';
+    protected $fillable = ['id_divisi', 'nik', 'nama', 'status', 'perihal', 'tanggal', 'file', 'file_name', 'lokasi', 'version', 'sifat_dokumen', 'created_by', 'updated_by', 'deleted_by'];
+    protected $casts = ['tanggal' => 'date'];
+}

@@ -1,0 +1,63 @@
+<?php
+
+namespace App\Models\Sekretariat;
+
+use App\Models\Traits\HasDocumentFeatures;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class RisalahRapat extends Model
+{
+    use SoftDeletes, HasDocumentFeatures;
+    protected $table = 'sekretariat_risalah_rapat';
+    protected $fillable = ['id_divisi', 'nomor', 'tanggal', 'periode', 'kategori', 'perihal', 'peserta', 'file', 'file_name', 'lokasi', 'version', 'sifat_dokumen', 'created_by', 'updated_by', 'deleted_by'];
+    protected $casts = ['tanggal' => 'date'];
+}
+
+class Materi extends Model
+{
+    use SoftDeletes, HasDocumentFeatures;
+    protected $table = 'sekretariat_materi';
+    protected $fillable = ['id_divisi', 'nomor', 'tanggal', 'periode', 'perihal', 'file', 'file_name', 'lokasi', 'version', 'sifat_dokumen', 'created_by', 'updated_by', 'deleted_by'];
+    protected $casts = ['tanggal' => 'date'];
+}
+
+class Laporan extends Model
+{
+    use SoftDeletes, HasDocumentFeatures;
+    protected $table = 'sekretariat_laporan';
+    protected $fillable = ['id_divisi', 'nomor', 'tanggal', 'periode', 'kategori', 'perihal', 'tujuan', 'dilaporkan', 'file', 'file_name', 'lokasi', 'version', 'sifat_dokumen', 'created_by', 'updated_by', 'deleted_by'];
+    protected $casts = ['tanggal' => 'date', 'dilaporkan' => 'date'];
+}
+
+class Surat extends Model
+{
+    use SoftDeletes, HasDocumentFeatures;
+    protected $table = 'sekretariat_surat';
+    protected $fillable = ['id_divisi', 'nomor', 'tanggal', 'kategori', 'perihal', 'dari', 'tujuan', 'disposisi', 'file', 'file_name', 'lokasi', 'version', 'sifat_dokumen', 'created_by', 'updated_by', 'deleted_by'];
+    protected $casts = ['tanggal' => 'date'];
+}
+
+class Pengadaan extends Model
+{
+    use SoftDeletes, HasDocumentFeatures;
+    protected $table = 'sekretariat_pengadaan';
+    protected $fillable = ['id_divisi', 'nomor', 'tanggal', 'kategori', 'perihal', 'tujuan', 'masa_akhir', 'file', 'file_name', 'lokasi', 'version', 'sifat_dokumen', 'created_by', 'updated_by', 'deleted_by'];
+    protected $casts = ['tanggal' => 'date'];
+}
+
+class RemunerasiPedoman extends Model
+{
+    use SoftDeletes, HasDocumentFeatures;
+    protected $table = 'sekretariat_remunerasi_pedoman';
+    protected $fillable = ['id_divisi', 'nomor', 'tanggal', 'periode', 'perihal', 'masa_akhir', 'file', 'file_name', 'lokasi', 'version', 'sifat_dokumen', 'created_by', 'updated_by', 'deleted_by'];
+    protected $casts = ['tanggal' => 'date'];
+}
+
+class RemunerasiDokumen extends Model
+{
+    use SoftDeletes, HasDocumentFeatures;
+    protected $table = 'sekretariat_remunerasi_dokumen';
+    protected $fillable = ['id_divisi', 'nomor', 'tanggal', 'periode', 'kategori', 'perihal', 'file', 'file_name', 'lokasi', 'version', 'sifat_dokumen', 'created_by', 'updated_by', 'deleted_by'];
+    protected $casts = ['tanggal' => 'date'];
+}

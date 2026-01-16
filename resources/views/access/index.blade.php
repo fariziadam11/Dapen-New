@@ -1,0 +1,122 @@
+@extends('layouts.app')
+
+@section('title', 'Manajemen Akses')
+
+@section('breadcrumb')
+    <li class="breadcrumb-item active">Akses Dokumen</li>
+@endsection
+
+@section('content')
+    <div class="page-header d-flex justify-content-between align-items-center mb-4">
+        <h1 class="page-title">Permintaan Akses Dokumen</h1>
+    </div>
+
+    <!-- Filter -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form class="row g-3">
+                <div class="col-md-10">
+                    <select name="status" class="form-select">
+                        <option value="">Semua Status</option>
+                        <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
+                        <option value="approved" {{ request('status') == 'approved' ? 'selected' : '' }}>Disetujui</option>
+                        <option value="rejected" {{ request('status') == 'rejected' ? 'selected' : '' }}>Ditolak</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100"><i class="bi bi-filter me-1"></i> Filter</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body p-0">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Peminta</th>
+                        <th>Dokumen</th>
+                        <th>Divisi</th>
+                        <th>Alasan</th>
+                        <th>Status</th>
+                        <th>Tanggal</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($requests as $i => $req)
+                        <tr>
+                            <td>{{ $requests->firstItem() + $i }}</td>
+                            <td><strong>{{ $req->requester?->name ?? '-' }}</strong></td>
+                            <td>{{ $req->document_type }} #{{ $req->document_id }}</td>
+                            <td>{{ $req->divisi?->nama_divisi ?? '-' }}</td>
+                            <td>{{ Str::limit($req->request_reason, 50) }}</td>
+                            <td>
+                                @if ($req->status == 'pending')
+                                    <span class="badge bg-warning text-dark">Pending</span>
+                                @elseif($req->status == 'approved')
+                                    <span class="badge bg-success">Disetujui</span>
+                                @else
+                                    <span class="badge bg-danger">Ditolak</span>
+                                @endif
+                            </td>
+                            <td>{{ $req->created_at?->format('d M Y') }}</td>
+                            <td>
+                                @if ($req->status == 'pending')
+                                    <form action="{{ route('access.approve', $req->id) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        <button type="submit" class="btn btn-sm btn-success"
+                                            onclick="return confirm('Setujui permintaan ini?')">
+                                            <i class="bi bi-check"></i>
+                                        </button>
+                                    </form>
+                                    <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal"
+                                        data-bs-target="#rejectModal{{ $req->id }}">
+                                        <i class="bi bi-x"></i>
+                                    </button>
+
+                                    <!-- Reject Modal -->
+                                    <div class="modal fade" id="rejectModal{{ $req->id }}" tabindex="-1">
+                                        <div class="modal-dialog">
+                                            <form action="{{ route('access.reject', $req->id) }}" method="POST">
+                                                @csrf
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Tolak Permintaan</h5>
+                                                        <button type="button" class="btn-close"
+                                                            data-bs-dismiss="modal"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <label class="form-label">Alasan Penolakan <span
+                                                                class="text-danger">*</span></label>
+                                                        <textarea name="reason" class="form-control" rows="3" required></textarea>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">Batal</button>
+                                                        <button type="submit" class="btn btn-danger">Tolak</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                @else
+                                    <span class="text-muted">-</span>
+                                @endif
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="8" class="text-center py-4 text-muted">Tidak ada permintaan akses</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+        @if ($requests->hasPages())
+            <div class="card-footer">{{ $requests->withQueryString()->links() }}</div>
+        @endif
+    </div>
+@endsection

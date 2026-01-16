@@ -1,0 +1,45 @@
+<?php
+
+namespace App\Models\Logistik;
+
+use App\Models\Traits\HasDocumentFeatures;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class UserSatisfaction extends Model
+{
+    use SoftDeletes, HasDocumentFeatures;
+    protected $table = 'logistiksarpen_user_satisfaction';
+    protected $fillable = ['id_divisi', 'tahun', 'tanggal', 'file', 'file_name', 'lokasi', 'version', 'sifat_dokumen', 'created_by', 'updated_by', 'deleted_by'];
+    protected $casts = ['tanggal' => 'date'];
+}
+
+class VendorSatisfaction extends Model
+{
+    use SoftDeletes, HasDocumentFeatures;
+    protected $table = 'logistiksarpen_vendor_satisfaction';
+    protected $fillable = ['id_divisi', 'tahun', 'tanggal', 'file', 'file_name', 'lokasi', 'version', 'sifat_dokumen', 'created_by', 'updated_by', 'deleted_by'];
+    protected $casts = ['tanggal' => 'date'];
+}
+
+class Smk3 extends Model
+{
+    use SoftDeletes, HasDocumentFeatures;
+    protected $table = 'logistiksarpen_smk3';
+    protected $fillable = ['id_divisi', 'tahun', 'bulan', 'nama_kegiatan', 'file', 'file_name', 'lokasi', 'version', 'sifat_dokumen', 'created_by', 'updated_by', 'deleted_by'];
+}
+
+class PolisAsuransi extends Model
+{
+    use SoftDeletes, HasDocumentFeatures;
+    protected $table = 'logistiksarpen_polis_asuransi';
+    protected $fillable = ['id_divisi', 'tahun', 'berlaku_mulai', 'berlaku_akhir', 'nilai', 'file', 'file_name', 'lokasi', 'version', 'sifat_dokumen', 'created_by', 'updated_by', 'deleted_by'];
+    protected $casts = ['berlaku_mulai' => 'date', 'berlaku_akhir' => 'date'];
+}
+
+class Jaminan extends Model
+{
+    use SoftDeletes, HasDocumentFeatures;
+    protected $table = 'logistiksarpen_jaminan';
+    protected $fillable = ['id_divisi', 'jenis_jaminan', 'nomor_drp', 'nama_pengadaan', 'vendor', 'file', 'file_name', 'lokasi', 'version', 'sifat_dokumen', 'created_by', 'updated_by', 'deleted_by'];
+}
