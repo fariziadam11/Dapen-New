@@ -1,4 +1,4 @@
-{{-- Form fields for Legal Memo --}}
+{{-- Form fields for Rarus --}}
 <div class="row">
     <div class="col-md-6 mb-3">
         <label class="form-label">Divisi</label>
@@ -12,29 +12,28 @@
         </select>
     </div>
     <div class="col-md-6 mb-3">
-        <label class="form-label">Tanggal </label>
+        <label class="form-label">Tanggal</label>
         <input type="date" name="tanggal" class="form-control @error('tanggal') is-invalid @enderror"
-            value="{{ old('tanggal', isset($record) && $record->tanggal ? $record->tanggal->format('Y-m-d') : '') }}">
+            value="{{ old('tanggal', isset($record->tanggal) ? date('Y-m-d', strtotime($record->tanggal)) : '') }}">
         @error('tanggal')
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
-    <div class="col-md-6 mb-3">
-        <label class="form-label">Judul </label>
-        <input type="text" name="judul" class="form-control @error('judul') is-invalid @enderror"
-            value="{{ old('judul', $record->judul ?? '') }}">
-        @error('judul')
+    <div class="col-12 mb-3">
+        <label class="form-label">Perihal</label>
+        <textarea name="perihal" class="form-control @error('perihal') is-invalid @enderror" rows="3">{{ old('perihal', $record->perihal ?? '') }}</textarea>
+        @error('perihal')
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
     <div class="col-md-6 mb-3">
-        <label class="form-label">Keterangan </label>
-        <textarea name="keterangan" class="form-control @error('keterangan') is-invalid @enderror" rows="3">{{ old('keterangan', $record->keterangan ?? '') }}</textarea>
-        @error('keterangan')
+        <label class="form-label">Kategori</label>
+        <input type="text" name="kategori" class="form-control @error('kategori') is-invalid @enderror"
+            value="{{ old('kategori', $record->kategori ?? '') }}" placeholder="Remunerasi, Organisasi, dll">
+        @error('kategori')
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
-
     <div class="col-md-6 mb-3">
         <label class="form-label">Sifat Dokumen</label>
         <select name="sifat_dokumen" class="form-select">

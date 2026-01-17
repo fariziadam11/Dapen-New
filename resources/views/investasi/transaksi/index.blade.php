@@ -41,7 +41,7 @@
                     @forelse($data as $i => $item)
                         <tr>
                             <td>{{ $data->firstItem() + $i }}</td>
-                            <td>{{ $item->type ?? '-' }}</td>
+                            <td>{{ $item->type == 1 ? 'Penjualan' : ($item->type == 2 ? 'Pembelian' : '-') }}</td>
                             <td>{{ $item->tgl_transaksi ? date('d/m/Y', strtotime($item->tgl_transaksi)) : '-' }}</td>
                             <td>{{ $item->perihal ?? '-' }}</td>
                             <td>{{ $item->saham ?? '-' }}</td>

@@ -16,10 +16,15 @@ class KontrakController extends BaseDocumentController
     {
         return $request->validate([
             'id_divisi' => 'required|exists:master_divisi,id',
-            'judul' => 'nullable|string|max:255',
-            'perihal' => 'nullable|string|max:255',
             'nomor' => 'nullable|string|max:100',
+            'judul' => 'nullable|string',
             'tanggal' => 'nullable|date',
+            'berlaku_awal' => 'nullable|string|max:100',
+            'berlaku_akhir' => 'nullable|string|max:100',
+            'jenis' => 'nullable|string|max:100',
+            'pihak' => 'nullable|string|max:100',
+            'pemilik' => 'nullable|string|max:100',
+            'status' => 'nullable|string|max:100',
             'file' => 'nullable|file|max:10240|mimes:pdf,doc,docx,xls,xlsx',
             'sifat_dokumen' => 'nullable|in:Umum,Rahasia',
             'lokasi' => 'nullable|string|max:255',

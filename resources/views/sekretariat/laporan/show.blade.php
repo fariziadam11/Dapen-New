@@ -1,33 +1,92 @@
 @extends('layouts.app')
 @section('title', 'Detail Laporan')
 @section('breadcrumb')
-<li class="breadcrumb-item"><a href="#">Sekretariat</a></li>
-<li class="breadcrumb-item"><a href="{{ route('sekretariat.laporan.index') }}">Laporan</a></li>
-<li class="breadcrumb-item active">Detail</li>
+    <li class="breadcrumb-item"><a href="{{ route('sekretariat.laporan.index') }}">Laporan</a></li>
+    <li class="breadcrumb-item active">Detail</li>
 @endsection
 @section('content')
-<div class="page-header mb-4"><h1 class="page-title">Detail Laporan</h1></div>
-<div class="card">
-    <div class="card-body">
-        <table class="table table-bordered">
-        <tr><th width="200">Periode</th><td>{{ $record->periode ?? '-' }}</td></tr>
-        <tr><th width="200">Kategori</th><td>{{ $record->kategori ?? '-' }}</td></tr>
-        <tr><th width="200">Perihal</th><td>{{ $record->perihal ?? '-' }}</td></tr>
-        <tr><th width="200">Tujuan</th><td>{{ $record->tujuan ?? '-' }}</td></tr>
-        <tr><th width="200">Divisi</th><td>{{ $record->divisi->nama_divisi ?? '-' }}</td></tr>
-        <tr><th>Sifat Dokumen</th><td><span class="badge bg-{{ $record->sifat_dokumen == 'Rahasia' ? 'danger' : 'success' }}">{{ $record->sifat_dokumen ?? 'Umum' }}</span></td></tr>
-        <tr><th>File</th><td>@if($record->file_name)<a href="{{ route('sekretariat.laporan.download', $record->id) }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-download"></i> {{ $record->file_name }}</a>@else - @endif</td></tr>
-        <tr><th>Dibuat</th><td>{{ $record->created_at ? $record->created_at->format('d F Y H:i') : '-' }}</td></tr>
-        <tr><th>Diupdate</th><td>{{ $record->updated_at ? $record->updated_at->format('d F Y H:i') : '-' }}</td></tr>
-        </table>
-        <hr class="my-4">
-        <div class="d-flex justify-content-between">
-            <a href="{{ route('sekretariat.laporan.index') }}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Kembali</a>
-            <div>
-                <a href="{{ route('sekretariat.laporan.edit', $record->id) }}" class="btn btn-warning"><i class="bi bi-pencil"></i> Edit</a>
-                <form action="{{ route('sekretariat.laporan.destroy', $record->id) }}" method="POST" class="d-inline">@csrf @method('DELETE')<button class="btn btn-danger"><i class="bi bi-trash"></i> Hapus</button></form>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Detail Laporan</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-hover">
+                        <tr>
+                            <th width="200">Divisi</th>
+                            <td>{{ $item->divisi->nama_divisi ?? '-' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Nomor</th>
+                            <td>{{ $item->nomor ?? '-' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Tanggal</th>
+                            <td>{{ $item->tanggal ? date('d/m/Y', strtotime($item->tanggal)) : '-' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Periode</th>
+                            <td>{{ $item->periode ?? '-' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Kategori</th>
+                            <td>{{ $item->kategori ?? '-' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Tujuan</th>
+                            <td>{{ $item->tujuan ?? '-' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Tanggal Dilaporkan</th>
+                            <td>{{ $item->dilaporkan ? date('d/m/Y', strtotime($item->dilaporkan)) : '-' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Perihal</th>
+                            <td>{{ $item->perihal ?? '-' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Sifat Dokumen</th>
+                            <td>
+                                @if ($item->sifat_dokumen == 'public')
+                                    <span class="badge bg-success">Public</span>
+                                @elseif($item->sifat_dokumen == 'private')
+                                    <span class="badge bg-danger">Private</span>
+                                @else
+                                    -
+                                @endif
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>File Dokumen</th>
+                            <td>
+                                @if ($item->file_name)
+                                    <div class="btn-group btn-group-sm">
+                                        <button
+                                            onclick="previewFile('{{ route('sekretariat.laporan.preview', $item->id) }}', '{{ $item->file_name }}')"
+                                            class="btn btn-primary" title="Preview"><i class="bi bi-eye"></i>
+                                            Preview</button>
+                                        <a href="{{ route('sekretariat.laporan.download', $item->id) }}"
+                                            class="btn btn-success" title="Download"><i class="bi bi-download"></i>
+                                            Download</a>
+                                    </div>
+                                @else
+                                    <span class="text-muted">-</span>
+                                @endif
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Lokasi Fisik</th>
+                            <td>{{ $item->lokasi ?? '-' }}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="card-footer text-end">
+                    <a href="{{ route('sekretariat.laporan.edit', $item->id) }}" class="btn btn-warning"><i
+                            class="bi bi-pencil"></i> Edit</a>
+                    <a href="{{ route('sekretariat.laporan.index') }}" class="btn btn-secondary">Kembali</a>
+                </div>
             </div>
         </div>
     </div>
-</div>
 @endsection

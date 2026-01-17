@@ -16,8 +16,11 @@ class LembarRekomendasiController extends BaseDocumentController
     {
         return $request->validate([
             'id_divisi' => 'required|exists:master_divisi,id',
+            'perihal' => 'nullable|string',
+            'keterangan' => 'nullable|string|max:100',
             'file' => 'nullable|file|max:10240|mimes:pdf,doc,docx,xls,xlsx',
             'sifat_dokumen' => 'nullable|in:Umum,Rahasia',
+            'lokasi' => 'nullable|string|max:255',
         ]);
     }
 }

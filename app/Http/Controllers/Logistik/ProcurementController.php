@@ -16,10 +16,9 @@ class ProcurementController extends BaseDocumentController
     {
         return $request->validate([
             'id_divisi' => 'required|exists:master_divisi,id',
-            'judul' => 'nullable|string|max:255',
-            'perihal' => 'nullable|string|max:255',
-            'nomor' => 'nullable|string|max:100',
-            'tanggal' => 'nullable|date',
+            'no_drp' => 'nullable|string|max:50',
+            'nama_kegiatan' => 'nullable|string|max:65535',
+            'direktorat' => 'nullable|string|max:255',
             'file' => 'nullable|file|max:10240|mimes:pdf,doc,docx,xls,xlsx',
             'sifat_dokumen' => 'nullable|in:Umum,Rahasia',
             'lokasi' => 'nullable|string|max:255',

@@ -16,9 +16,10 @@ class NaikGajiController extends BaseDocumentController
     {
         return $request->validate([
             'id_divisi' => 'required|exists:master_divisi,id',
-            'judul' => 'nullable|string|max:255',
-            'perihal' => 'nullable|string|max:255',
-            'nomor' => 'nullable|string|max:100',
+            'nik' => 'nullable|string|max:25',
+            'nama' => 'required|string|max:100',
+            'status' => 'nullable|integer',
+            'perihal' => 'nullable|string|max:65535',
             'tanggal' => 'nullable|date',
             'file' => 'nullable|file|max:10240|mimes:pdf,doc,docx,xls,xlsx',
             'sifat_dokumen' => 'nullable|in:Umum,Rahasia',

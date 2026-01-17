@@ -16,8 +16,11 @@ class UserSatisfactionController extends BaseDocumentController
     {
         return $request->validate([
             'id_divisi' => 'required|exists:master_divisi,id',
+            'tahun' => 'required|integer|digits:4',
+            'tanggal' => 'nullable|date',
             'file' => 'nullable|file|max:10240|mimes:pdf,doc,docx,xls,xlsx',
             'sifat_dokumen' => 'nullable|in:Umum,Rahasia',
+            'lokasi' => 'nullable|string|max:255',
         ]);
     }
 }

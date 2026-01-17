@@ -16,10 +16,10 @@ class MateriController extends BaseDocumentController
     {
         return $request->validate([
             'id_divisi' => 'required|exists:master_divisi,id',
-            'judul' => 'nullable|string|max:255',
-            'perihal' => 'nullable|string|max:255',
-            'nomor' => 'nullable|string|max:100',
+            'nomor' => 'nullable|string|max:50',
             'tanggal' => 'nullable|date',
+            'periode' => 'nullable|string|max:25',
+            'perihal' => 'nullable|string|max:65535',
             'file' => 'nullable|file|max:10240|mimes:pdf,doc,docx,xls,xlsx',
             'sifat_dokumen' => 'nullable|in:Umum,Rahasia',
             'lokasi' => 'nullable|string|max:255',

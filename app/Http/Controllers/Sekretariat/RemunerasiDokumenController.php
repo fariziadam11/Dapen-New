@@ -16,8 +16,14 @@ class RemunerasiDokumenController extends BaseDocumentController
     {
         return $request->validate([
             'id_divisi' => 'required|exists:master_divisi,id',
+            'nomor' => 'nullable|string|max:50',
+            'tanggal' => 'nullable|date',
+            'periode' => 'nullable|string|max:25',
+            'kategori' => 'nullable|string|max:255',
+            'perihal' => 'nullable|string|max:65535',
             'file' => 'nullable|file|max:10240|mimes:pdf,doc,docx,xls,xlsx',
             'sifat_dokumen' => 'nullable|in:Umum,Rahasia',
+            'lokasi' => 'nullable|string|max:255',
         ]);
     }
 }

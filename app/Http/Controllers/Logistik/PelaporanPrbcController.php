@@ -16,8 +16,11 @@ class PelaporanPrbcController extends BaseDocumentController
     {
         return $request->validate([
             'id_divisi' => 'required|exists:master_divisi,id',
+            'bulan' => 'required|string|max:50',
+            'tanggal' => 'nullable|date',
             'file' => 'nullable|file|max:10240|mimes:pdf,doc,docx,xls,xlsx',
             'sifat_dokumen' => 'nullable|in:Umum,Rahasia',
+            'lokasi' => 'nullable|string|max:255',
         ]);
     }
 }

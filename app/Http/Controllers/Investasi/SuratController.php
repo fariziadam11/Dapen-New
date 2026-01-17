@@ -10,16 +10,21 @@ class SuratController extends BaseDocumentController
     protected $model = \App\Models\Investasi\Surat::class;
     protected $viewPath = 'investasi.surat';
     protected $routePrefix = 'investasi.surat';
-    protected $moduleName = 'Surat';
+    protected $moduleName = 'Investasi - Surat';
 
     protected function validateRequest(Request $request, $id = null): array
     {
         return $request->validate([
             'id_divisi' => 'required|exists:master_divisi,id',
-            'judul' => 'nullable|string|max:255',
-            'perihal' => 'nullable|string|max:255',
-            'nomor' => 'nullable|string|max:100',
-            'tanggal' => 'nullable|date',
+            'tgl_surat' => 'nullable|date',
+            'type' => 'required|in:1,2',
+            'no_surat' => 'nullable|string|max:100',
+            'no_agenda' => 'nullable|string|max:100',
+            'perihal' => 'nullable|string|max:100',
+            'jenis' => 'nullable|in:1,2',
+            'nama_perusahaan' => 'nullable|string|max:100',
+            'klasifikasi' => 'nullable|integer',
+            'keterangan' => 'nullable|string',
             'file' => 'nullable|file|max:10240|mimes:pdf,doc,docx,xls,xlsx',
             'sifat_dokumen' => 'nullable|in:Umum,Rahasia',
             'lokasi' => 'nullable|string|max:255',

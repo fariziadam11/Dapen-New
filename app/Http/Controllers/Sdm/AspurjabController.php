@@ -16,6 +16,12 @@ class AspurjabController extends BaseDocumentController
     {
         return $request->validate([
             'id_divisi' => 'required|exists:master_divisi,id',
+            'nomor' => 'nullable|string|max:255', // Changed to string as binary input handling might be specific, but standard text input for now
+            'tanggal' => 'nullable|date',
+            'nama' => 'required|string|max:100',
+            'mulai' => 'nullable|date',
+            'akhir' => 'nullable|date',
+            'kategori' => 'required|string|max:100',
             'file' => 'nullable|file|max:10240|mimes:pdf,doc,docx,xls,xlsx',
             'sifat_dokumen' => 'nullable|in:Umum,Rahasia',
         ]);

@@ -1,21 +1,5 @@
-{{-- Form fields for SPB --}}
+{{-- Form fields for Promosi Mutasi --}}
 <div class="row">
-    <div class="col-md-6 mb-3">
-        <label class="form-label">Surat Bayar <span class="text-danger">*</span></label>
-        <select name="id_surat_bayar" class="form-select @error('id_surat_bayar') is-invalid @enderror" required>
-            <option value="">Pilih Surat Bayar</option>
-            @foreach ($suratBayars ?? [] as $surat)
-                <option value="{{ $surat->id }}"
-                    {{ old('id_surat_bayar', $record->id_surat_bayar ?? '') == $surat->id ? 'selected' : '' }}>
-                    {{ $surat->nomor_surat_bayar }} -
-                    {{ $surat->tanggal_surat_bayar ? date('d/m/Y', strtotime($surat->tanggal_surat_bayar)) : '' }}
-                </option>
-            @endforeach
-        </select>
-        @error('id_surat_bayar')
-            <div class="invalid-feedback">{{ $message }}</div>
-        @enderror
-    </div>
     <div class="col-md-6 mb-3">
         <label class="form-label">Divisi</label>
         <select name="id_divisi" class="form-select">
@@ -28,38 +12,48 @@
         </select>
     </div>
     <div class="col-md-6 mb-3">
-        <label class="form-label">Tanggal SPB </label>
-        <input type="date" name="tanggal_spb" class="form-control @error('tanggal_spb') is-invalid @enderror"
-            value="{{ old('tanggal_spb', isset($record) && $record->tanggal_spb ? $record->tanggal_spb->format('Y-m-d') : '') }}">
-        @error('tanggal_spb')
+        <label class="form-label">NIK</label>
+        <input type="text" name="nik" class="form-control @error('nik') is-invalid @enderror"
+            value="{{ old('nik', $record->nik ?? '') }}">
+        @error('nik')
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
     <div class="col-md-6 mb-3">
-        <label class="form-label">Nomor SPB </label>
-        <input type="text" name="nomor_spb" class="form-control @error('nomor_spb') is-invalid @enderror"
-            value="{{ old('nomor_spb', $record->nomor_spb ?? '') }}">
-        @error('nomor_spb')
+        <label class="form-label">Nama</label>
+        <input type="text" name="nama" class="form-control @error('nama') is-invalid @enderror"
+            value="{{ old('nama', $record->nama ?? '') }}">
+        @error('nama')
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
     <div class="col-md-6 mb-3">
-        <label class="form-label">Nominal </label>
-        <input type="number" name="nominal" class="form-control @error('nominal') is-invalid @enderror"
-            value="{{ old('nominal', $record->nominal ?? '') }}" step="0.01">
-        @error('nominal')
+        <label class="form-label">Tanggal</label>
+        <input type="date" name="tanggal" class="form-control @error('tanggal') is-invalid @enderror"
+            value="{{ old('tanggal', isset($record->tanggal) ? date('Y-m-d', strtotime($record->tanggal)) : '') }}">
+        @error('tanggal')
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
     <div class="col-md-6 mb-3">
-        <label class="form-label">Tujuan </label>
-        <input type="text" name="tujuan" class="form-control @error('tujuan') is-invalid @enderror"
-            value="{{ old('tujuan', $record->tujuan ?? '') }}">
-        @error('tujuan')
+        <label class="form-label">Status</label>
+        <select name="status" class="form-select @error('status') is-invalid @enderror">
+            <option value="">Pilih Status</option>
+            <option value="1" {{ old('status', $record->status ?? '') == 1 ? 'selected' : '' }}>Aktif</option>
+            <option value="0" {{ old('status', $record->status ?? '') == 0 ? 'selected' : '' }}>Tidak Aktif
+            </option>
+        </select>
+        @error('status')
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
-
+    <div class="col-12 mb-3">
+        <label class="form-label">Perihal</label>
+        <textarea name="perihal" class="form-control @error('perihal') is-invalid @enderror" rows="3">{{ old('perihal', $record->perihal ?? '') }}</textarea>
+        @error('perihal')
+            <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+    </div>
     <div class="col-md-6 mb-3">
         <label class="form-label">Sifat Dokumen</label>
         <select name="sifat_dokumen" class="form-select">

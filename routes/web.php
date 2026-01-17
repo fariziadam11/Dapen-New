@@ -118,6 +118,18 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('compliance-check', \App\Http\Controllers\HukumKepatuhan\ComplianceCheckController::class);
         Route::get('compliance-check/{id}/download', [\App\Http\Controllers\HukumKepatuhan\ComplianceCheckController::class, 'download'])->name('compliance-check.download');
         Route::get('compliance-check/{id}/preview', [\App\Http\Controllers\HukumKepatuhan\ComplianceCheckController::class, 'preview'])->name('compliance-check.preview');
+        Route::resource('executive-summary', \App\Http\Controllers\HukumKepatuhan\ExecutiveSummaryController::class);
+        Route::get('executive-summary/{id}/download', [\App\Http\Controllers\HukumKepatuhan\ExecutiveSummaryController::class, 'download'])->name('executive-summary.download');
+        Route::get('executive-summary/{id}/preview', [\App\Http\Controllers\HukumKepatuhan\ExecutiveSummaryController::class, 'preview'])->name('executive-summary.preview');
+        Route::resource('lembar-keputusan', \App\Http\Controllers\HukumKepatuhan\LembarKeputusanController::class);
+        Route::get('lembar-keputusan/{id}/download', [\App\Http\Controllers\HukumKepatuhan\LembarKeputusanController::class, 'download'])->name('lembar-keputusan.download');
+        Route::get('lembar-keputusan/{id}/preview', [\App\Http\Controllers\HukumKepatuhan\LembarKeputusanController::class, 'preview'])->name('lembar-keputusan.preview');
+        Route::resource('lembar-rekomendasi', \App\Http\Controllers\HukumKepatuhan\LembarRekomendasiController::class);
+        Route::get('lembar-rekomendasi/{id}/download', [\App\Http\Controllers\HukumKepatuhan\LembarRekomendasiController::class, 'download'])->name('lembar-rekomendasi.download');
+        Route::get('lembar-rekomendasi/{id}/preview', [\App\Http\Controllers\HukumKepatuhan\LembarRekomendasiController::class, 'preview'])->name('lembar-rekomendasi.preview');
+        Route::resource('penomoran', \App\Http\Controllers\HukumKepatuhan\PenomoranController::class);
+        Route::get('penomoran/{id}/download', [\App\Http\Controllers\HukumKepatuhan\PenomoranController::class, 'download'])->name('penomoran.download');
+        Route::get('penomoran/{id}/preview', [\App\Http\Controllers\HukumKepatuhan\PenomoranController::class, 'preview'])->name('penomoran.preview');
     });
 
     // ======================
@@ -199,6 +211,21 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('surat-keluar', \App\Http\Controllers\Sdm\SuratKeluarController::class);
         Route::get('surat-keluar/{id}/download', [\App\Http\Controllers\Sdm\SuratKeluarController::class, 'download'])->name('surat-keluar.download');
         Route::get('surat-keluar/{id}/preview', [\App\Http\Controllers\Sdm\SuratKeluarController::class, 'preview'])->name('surat-keluar.preview');
+        Route::resource('capeg-pegrus', \App\Http\Controllers\Sdm\CapegPegrusController::class);
+        Route::get('capeg-pegrus/{id}/download', [\App\Http\Controllers\Sdm\CapegPegrusController::class, 'download'])->name('capeg-pegrus.download');
+        Route::get('capeg-pegrus/{id}/preview', [\App\Http\Controllers\Sdm\CapegPegrusController::class, 'preview'])->name('capeg-pegrus.preview');
+        Route::resource('penghargaan', \App\Http\Controllers\Sdm\PenghargaanController::class);
+        Route::get('penghargaan/{id}/download', [\App\Http\Controllers\Sdm\PenghargaanController::class, 'download'])->name('penghargaan.download');
+        Route::get('penghargaan/{id}/preview', [\App\Http\Controllers\Sdm\PenghargaanController::class, 'preview'])->name('penghargaan.preview');
+        Route::resource('ikut-organisasi', \App\Http\Controllers\Sdm\IkutOrganisasiController::class);
+        Route::get('ikut-organisasi/{id}/download', [\App\Http\Controllers\Sdm\IkutOrganisasiController::class, 'download'])->name('ikut-organisasi.download');
+        Route::get('ikut-organisasi/{id}/preview', [\App\Http\Controllers\Sdm\IkutOrganisasiController::class, 'preview'])->name('ikut-organisasi.preview');
+        Route::resource('aspurjab', \App\Http\Controllers\Sdm\AspurjabController::class);
+        Route::get('aspurjab/{id}/download', [\App\Http\Controllers\Sdm\AspurjabController::class, 'download'])->name('aspurjab.download');
+        Route::get('aspurjab/{id}/preview', [\App\Http\Controllers\Sdm\AspurjabController::class, 'preview'])->name('aspurjab.preview');
+        Route::resource('rekon', \App\Http\Controllers\Sdm\RekonController::class);
+        Route::get('rekon/{id}/download', [\App\Http\Controllers\Sdm\RekonController::class, 'download'])->name('rekon.download');
+        Route::get('rekon/{id}/preview', [\App\Http\Controllers\Sdm\RekonController::class, 'preview'])->name('rekon.preview');
     });
 
     // ======================
@@ -220,6 +247,12 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('pengadaan', \App\Http\Controllers\Sekretariat\PengadaanController::class);
         Route::get('pengadaan/{id}/download', [\App\Http\Controllers\Sekretariat\PengadaanController::class, 'download'])->name('pengadaan.download');
         Route::get('pengadaan/{id}/preview', [\App\Http\Controllers\Sekretariat\PengadaanController::class, 'preview'])->name('pengadaan.preview');
+        Route::resource('remunerasi-pedoman', \App\Http\Controllers\Sekretariat\RemunerasiPedomanController::class);
+        Route::get('remunerasi-pedoman/{id}/download', [\App\Http\Controllers\Sekretariat\RemunerasiPedomanController::class, 'download'])->name('remunerasi-pedoman.download');
+        Route::get('remunerasi-pedoman/{id}/preview', [\App\Http\Controllers\Sekretariat\RemunerasiPedomanController::class, 'preview'])->name('remunerasi-pedoman.preview');
+        Route::resource('remunerasi-dokumen', \App\Http\Controllers\Sekretariat\RemunerasiDokumenController::class);
+        Route::get('remunerasi-dokumen/{id}/download', [\App\Http\Controllers\Sekretariat\RemunerasiDokumenController::class, 'download'])->name('remunerasi-dokumen.download');
+        Route::get('remunerasi-dokumen/{id}/preview', [\App\Http\Controllers\Sekretariat\RemunerasiDokumenController::class, 'preview'])->name('remunerasi-dokumen.preview');
     });
 
     // ======================
@@ -250,6 +283,15 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('jaminan', \App\Http\Controllers\Logistik\JaminanController::class);
         Route::get('jaminan/{id}/download', [\App\Http\Controllers\Logistik\JaminanController::class, 'download'])->name('jaminan.download');
         Route::get('jaminan/{id}/preview', [\App\Http\Controllers\Logistik\JaminanController::class, 'preview'])->name('jaminan.preview');
+        Route::resource('pelaporan-prbc', \App\Http\Controllers\Logistik\PelaporanPrbcController::class);
+        Route::get('pelaporan-prbc/{id}/download', [\App\Http\Controllers\Logistik\PelaporanPrbcController::class, 'download'])->name('pelaporan-prbc.download');
+        Route::get('pelaporan-prbc/{id}/preview', [\App\Http\Controllers\Logistik\PelaporanPrbcController::class, 'preview'])->name('pelaporan-prbc.preview');
+        Route::resource('user-satisfaction', \App\Http\Controllers\Logistik\UserSatisfactionController::class);
+        Route::get('user-satisfaction/{id}/download', [\App\Http\Controllers\Logistik\UserSatisfactionController::class, 'download'])->name('user-satisfaction.download');
+        Route::get('user-satisfaction/{id}/preview', [\App\Http\Controllers\Logistik\UserSatisfactionController::class, 'preview'])->name('user-satisfaction.preview');
+        Route::resource('vendor-satisfaction', \App\Http\Controllers\Logistik\VendorSatisfactionController::class);
+        Route::get('vendor-satisfaction/{id}/download', [\App\Http\Controllers\Logistik\VendorSatisfactionController::class, 'download'])->name('vendor-satisfaction.download');
+        Route::get('vendor-satisfaction/{id}/preview', [\App\Http\Controllers\Logistik\VendorSatisfactionController::class, 'preview'])->name('vendor-satisfaction.preview');
     });
 
     // ======================
