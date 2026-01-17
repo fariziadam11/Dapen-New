@@ -19,10 +19,9 @@ class PolisAsuransiController extends BaseDocumentController
             'tahun' => 'required|integer|digits:4',
             'berlaku_mulai' => 'nullable|date',
             'berlaku_akhir' => 'nullable|date',
-            'nilai' => 'nullable|string|max:100',
+            'nilai' => 'nullable|string|max:255',
             'file' => 'nullable|file|max:10240|mimes:pdf,doc,docx,xls,xlsx',
-            'sifat_dokumen' => 'nullable|in:Umum,Rahasia',
-            'lokasi' => 'nullable|string|max:255',
+            'sifat_dokumen' => 'nullable|in:Umum,Rahasia'
         ]);
     }
 }

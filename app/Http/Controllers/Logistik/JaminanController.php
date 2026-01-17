@@ -16,13 +16,12 @@ class JaminanController extends BaseDocumentController
     {
         return $request->validate([
             'id_divisi' => 'required|exists:master_divisi,id',
-            'jenis_jaminan' => 'required|string|max:50',
-            'nomor_drp' => 'nullable|string|max:100',
-            'nama_pengadaan' => 'nullable|string|max:65535',
+            'jenis_jaminan' => 'nullable|string|max:255',
+            'nomor_drp' => 'nullable|string|max:255',
+            'nama_pengadaan' => 'nullable|string',
             'vendor' => 'nullable|string|max:255',
             'file' => 'nullable|file|max:10240|mimes:pdf,doc,docx,xls,xlsx',
-            'sifat_dokumen' => 'nullable|in:Umum,Rahasia',
-            'lokasi' => 'nullable|string|max:255',
+            'sifat_dokumen' => 'nullable|in:Umum,Rahasia'
         ]);
     }
 }

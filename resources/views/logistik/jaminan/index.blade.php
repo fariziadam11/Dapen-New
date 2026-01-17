@@ -1,9 +1,7 @@
 @extends('layouts.app')
 @section('title', 'Jaminan')
 @section('breadcrumb')
-    <li class="breadcrumb-item">
-        <a href="#">Logistik</a>
-    </li>
+    <li class="breadcrumb-item"><a href="#">Logistik</a></li>
     <li class="breadcrumb-item active">Jaminan</li>
 @endsection
 @section('content')
@@ -14,10 +12,8 @@
     <div class="card mb-4">
         <div class="card-body">
             <form method="GET" class="row g-3">
-                <div class="col-md-8"><input type="text" name="search" class="form-control" placeholder="Cari..."
-                        value="{{ request('search') }}"></div>
-                <div class="col-md-4"><button type="submit" class="btn btn-primary w-100"><i class="bi bi-search"></i>
-                        Cari</button></div>
+                <div class="col-md-8"><input type="text" name="search" class="form-control" placeholder="Cari..." value="{{ request('search') }}"></div>
+                <div class="col-md-4"><button type="submit" class="btn btn-primary w-100"><i class="bi bi-search"></i> Cari</button></div>
             </form>
         </div>
     </div>
@@ -31,6 +27,7 @@
                         <th>Nomor DRP</th>
                         <th>Nama Pengadaan</th>
                         <th>Vendor</th>
+                        
                         <th>File</th>
                         <th>Aksi</th>
                     </tr>
@@ -41,35 +38,32 @@
                             <td>{{ $items->firstItem() + $i }}</td>
                             <td>{{ $item->jenis_jaminan ?? '-' }}</td>
                             <td>{{ $item->nomor_drp ?? '-' }}</td>
-                            <td>{{ Str::limit($item->nama_pengadaan, 30) ?? '-' }}</td>
+                            <td>{{ Str::limit($item->nama_pengadaan ?? '-', 50) }}</td>
                             <td>{{ $item->vendor ?? '-' }}</td>
+                            
                             <td>
                                 @if ($item->file_name)
-                                    <div class="btn-group btn-group-sm"><button
-                                            onclick="previewFile('{{ route('logistik.jaminan.preview', $item->id) }}', '{{ $item->file_name }}')"
-                                            class="btn btn-outline-primary" title="Preview"><i
-                                                class="bi bi-eye"></i></button><a
-                                            href="{{ route('logistik.jaminan.download', $item->id) }}"
-                                            class="btn btn-outline-success" title="Download"><i
-                                            class="bi bi-download"></i></a></div>@else<span class="text-muted">-</span>
+                                    <div class="btn-group btn-group-sm">
+                                        <button onclick="previewFile('{{ route('logistik.jaminan.preview', $item->id) }}', '{{ $item->file_name }}')" class="btn btn-outline-primary" title="Preview"><i class="bi bi-eye"></i></button>
+                                        <a href="{{ route('logistik.jaminan.download', $item->id) }}" class="btn btn-outline-success" title="Download"><i class="bi bi-download"></i></a>
+                                    </div>
+                                @else
+                                    <span class="text-muted">-</span>
                                 @endif
                             </td>
                             <td>
                                 <div class="btn-group btn-group-sm">
-                                    <a href="{{ route('logistik.jaminan.show', $item->id) }}"
-                                        class="btn btn-outline-primary"><i class="bi bi-eye"></i></a>
-                                    <a href="{{ route('logistik.jaminan.edit', $item->id) }}"
-                                        class="btn btn-outline-warning"><i class="bi bi-pencil"></i></a>
-                                    <form action="{{ route('logistik.jaminan.destroy', $item->id) }}" method="POST"
-                                        class="d-inline">@csrf @method('DELETE')<button class="btn btn-outline-danger"><i
-                                                class="bi bi-trash"></i></button></form>
+                                    <a href="{{ route('logistik.jaminan.show', $item->id) }}" class="btn btn-outline-primary"><i class="bi bi-eye"></i></a>
+                                    <a href="{{ route('logistik.jaminan.edit', $item->id) }}" class="btn btn-outline-warning"><i class="bi bi-pencil"></i></a>
+                                    <form action="{{ route('logistik.jaminan.destroy', $item->id) }}" method="POST" class="d-inline">
+                                        @csrf @method('DELETE')
+                                        <button class="btn btn-outline-danger" onclick="return confirm('Apakah Anda yakin?')"><i class="bi bi-trash"></i></button>
+                                    </form>
                                 </div>
                             </td>
                         </tr>
                     @empty
-                        <tr>
-                            <td colspan="7" class="text-center py-4 text-muted">Belum ada data</td>
-                        </tr>
+                        <tr><td colspan="7" class="text-center py-4 text-muted">Belum ada data</td></tr>
                     @endforelse
                 </tbody>
             </table>

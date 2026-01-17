@@ -116,6 +116,7 @@ abstract class BaseDocumentController extends Controller
 
         return view($this->viewPath . '.show', [
             'record' => $record,
+            'item' => $record, // Alias for backward compatibility
             'moduleName' => $this->moduleName,
             'routePrefix' => $this->routePrefix,
         ]);
@@ -131,6 +132,7 @@ abstract class BaseDocumentController extends Controller
 
         return view($this->viewPath . '.edit', [
             'record' => $record,
+            'item' => $record, // Alias for backward compatibility
             'moduleName' => $this->moduleName,
             'routePrefix' => $this->routePrefix,
             'divisions' => $this->getUserDivisions(),

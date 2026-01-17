@@ -4,7 +4,7 @@
             <label for="id_divisi" class="form-label">Divisi <span class="text-danger">*</span></label>
             <select name="id_divisi" id="id_divisi" class="form-select @error('id_divisi') is-invalid @enderror" required>
                 <option value="">Pilih Divisi</option>
-                @foreach (\App\Models\Master\Orgs\MasterDivisi::all() as $divisi)
+                @foreach (\App\Models\MasterDivisi::all() as $divisi)
                     <option value="{{ $divisi->id }}"
                         {{ old('id_divisi', $item->id_divisi ?? '') == $divisi->id ? 'selected' : '' }}>
                         {{ $divisi->nama_divisi }}

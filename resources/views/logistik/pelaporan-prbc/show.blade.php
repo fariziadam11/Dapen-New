@@ -1,7 +1,7 @@
 @extends('layouts.app')
-@section('title', 'Detail Pelaporan PRBC')
+@section('title', 'Detail Pelaporan Prbc')
 @section('breadcrumb')
-    <li class="breadcrumb-item"><a href="{{ route('logistik.pelaporan-prbc.index') }}">Pelaporan PRBC</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('logistik.pelaporan-prbc.index') }}">Pelaporan Prbc</a></li>
     <li class="breadcrumb-item active">Detail</li>
 @endsection
 @section('content')
@@ -9,7 +9,7 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">
-                    <h5 class="card-title mb-0">Detail Pelaporan PRBC</h5>
+                    <h5 class="card-title mb-0">Detail Pelaporan Prbc</h5>
                 </div>
                 <div class="card-body">
                     <table class="table table-hover">
@@ -28,12 +28,10 @@
                         <tr>
                             <th>Sifat Dokumen</th>
                             <td>
-                                @if ($item->sifat_dokumen == 'public')
-                                    <span class="badge bg-success">Public</span>
-                                @elseif($item->sifat_dokumen == 'private')
-                                    <span class="badge bg-danger">Private</span>
+                                @if (($item->sifat_dokumen ?? '') == 'Rahasia')
+                                    <span class="badge bg-danger">Rahasia</span>
                                 @else
-                                    -
+                                    <span class="badge bg-success">Umum</span>
                                 @endif
                             </td>
                         </tr>
@@ -42,13 +40,8 @@
                             <td>
                                 @if ($item->file_name)
                                     <div class="btn-group btn-group-sm">
-                                        <button
-                                            onclick="previewFile('{{ route('logistik.pelaporan-prbc.preview', $item->id) }}', '{{ $item->file_name }}')"
-                                            class="btn btn-primary" title="Preview"><i class="bi bi-eye"></i>
-                                            Preview</button>
-                                        <a href="{{ route('logistik.pelaporan-prbc.download', $item->id) }}"
-                                            class="btn btn-success" title="Download"><i class="bi bi-download"></i>
-                                            Download</a>
+                                        <button onclick="previewFile('{{ route('logistik.pelaporan-prbc.preview', $item->id) }}', '{{ $item->file_name }}')" class="btn btn-primary" title="Preview"><i class="bi bi-eye"></i> Preview</button>
+                                        <a href="{{ route('logistik.pelaporan-prbc.download', $item->id) }}" class="btn btn-success" title="Download"><i class="bi bi-download"></i> Download</a>
                                     </div>
                                 @else
                                     <span class="text-muted">-</span>
@@ -62,8 +55,7 @@
                     </table>
                 </div>
                 <div class="card-footer text-end">
-                    <a href="{{ route('logistik.pelaporan-prbc.edit', $item->id) }}" class="btn btn-warning"><i
-                            class="bi bi-pencil"></i> Edit</a>
+                    <a href="{{ route('logistik.pelaporan-prbc.edit', $item->id) }}" class="btn btn-warning"><i class="bi bi-pencil"></i> Edit</a>
                     <a href="{{ route('logistik.pelaporan-prbc.index') }}" class="btn btn-secondary">Kembali</a>
                 </div>
             </div>
