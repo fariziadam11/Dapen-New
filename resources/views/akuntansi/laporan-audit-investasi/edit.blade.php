@@ -1,26 +1,21 @@
 @extends('layouts.app')
-@section('title', (isset($record) ? 'Edit' : 'Tambah') . ' - ' . ($moduleName ?? 'Laporan Audit Investasi'))
+@section('title', 'Edit Laporan Audit Investasi')
 @section('breadcrumb')
 <li class="breadcrumb-item"><a href="#">Akuntansi</a></li>
-<li class="breadcrumb-item"><a href="{{ route($routePrefix . '.index') }}">Laporan Audit Investasi</a></li>
-<li class="breadcrumb-item active">{{ isset($record) ? 'Edit' : 'Tambah' }}</li>
+<li class="breadcrumb-item"><a href="{{ route('akuntansi.laporan-audit-investasi.index') }}">Laporan Audit Investasi</a></li>
+<li class="breadcrumb-item active">Edit</li>
 @endsection
 @section('content')
-<div class="page-header mb-4"><h1 class="page-title">{{ isset($record) ? 'Edit' : 'Tambah' }} {{ $moduleName ?? 'Laporan Audit Investasi' }}</h1></div>
+<div class="page-header mb-4"><h1 class="page-title">Edit Laporan Audit Investasi</h1></div>
 <div class="card"><div class="card-body">
-    <form action="{{ isset($record) ? route($routePrefix . '.update', $record->id) : route($routePrefix . '.store') }}" method="POST" enctype="multipart/form-data">
-        @csrf @if(isset($record)) @method('PUT') @endif
-        <div class="row g-4">
-            <div class="col-md-6"><label class="form-label">Divisi <span class="text-danger">*</span></label><select name="id_divisi" class="form-select" required><option value="">Pilih Divisi</option>@foreach($divisions ?? [] as $d)<option value="{{ $d->id }}" {{ old('id_divisi', $record->id_divisi ?? '') == $d->id ? 'selected' : '' }}>{{ $d->nama_divisi }}</option>@endforeach</select></div>
-            <div class="col-md-6"><label class="form-label">Klasifikasi</label><select name="sifat_dokumen" class="form-select"><option value="Umum" {{ old('sifat_dokumen', $record->sifat_dokumen ?? '') == 'Umum' ? 'selected' : '' }}>Umum</option><option value="Rahasia" {{ old('sifat_dokumen', $record->sifat_dokumen ?? '') == 'Rahasia' ? 'selected' : '' }}>Rahasia</option></select></div>
-            <div class="col-md-6"><label class="form-label">Nomor</label><input type="text" name="nomor" class="form-control" value="{{ old('nomor', $record->nomor ?? '') }}"></div>
-            <div class="col-md-6"><label class="form-label">Tanggal</label><input type="date" name="tanggal" class="form-control" value="{{ old('tanggal', isset($record->tanggal) ? \Carbon\Carbon::parse($record->tanggal)->format('Y-m-d') : '') }}"></div>
-            <div class="col-12"><label class="form-label">Judul/Perihal <span class="text-danger">*</span></label><input type="text" name="judul" class="form-control" value="{{ old('judul', $record->judul ?? $record->perihal ?? '') }}" required></div>
-            <div class="col-12"><label class="form-label">Lokasi Fisik</label><input type="text" name="lokasi" class="form-control" value="{{ old('lokasi', $record->lokasi ?? '') }}"></div>
-            <div class="col-12"><label class="form-label">File @if(!isset($record))<span class="text-danger">*</span>@endif</label><input type="file" name="file" class="form-control" accept=".pdf,.doc,.docx,.xls,.xlsx" {{ !isset($record) ? 'required' : '' }}>@if(isset($record) && $record->file)<div class="mt-2"><span class="badge bg-success">{{ $record->file_name }}</span></div>@endif</div>
-        </div>
+    <form action="{{ route('akuntansi.laporan-audit-investasi.update', $record->id) }}" method="POST" enctype="multipart/form-data" data-confirm="Apakah Anda yakin ingin mengupdate data ini?">
+        @csrf @method('PUT')
+        @include('akuntansi.laporan-audit-investasi._form', ['record' => $record])
         <hr class="my-4">
-        <div class="d-flex justify-content-between"><a href="{{ route($routePrefix . '.index') }}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Kembali</a><button type="submit" class="btn btn-primary"><i class="bi bi-check-lg"></i> {{ isset($record) ? 'Update' : 'Simpan' }}</button></div>
+        <div class="d-flex justify-content-between">
+            <a href="{{ route('akuntansi.laporan-audit-investasi.index') }}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Kembali</a>
+            <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg"></i> Update</button>
+        </div>
     </form>
 </div></div>
 @endsection

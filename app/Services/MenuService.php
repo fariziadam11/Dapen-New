@@ -36,9 +36,9 @@ class MenuService
         if ($user->isSuperAdmin()) {
             $menus = BaseMenu::where('is_active', 1)
                 ->whereNull('parent_id')
-                ->orderBy('order_number')
+                ->orderBy('sequence')
                 ->with(['children' => function ($q) {
-                    $q->where('is_active', 1)->orderBy('order_number');
+                    $q->where('is_active', 1)->orderBy('sequence');
                 }])
                 ->get();
         } else {
@@ -53,11 +53,11 @@ class MenuService
                             $sub->whereIn('id', $allowedMenuIds);
                         });
                 })
-                ->orderBy('order_number')
+                ->orderBy('sequence')
                 ->with(['children' => function ($q) use ($allowedMenuIds) {
                     $q->where('is_active', 1)
                         ->whereIn('id', $allowedMenuIds)
-                        ->orderBy('order_number');
+                        ->orderBy('sequence');
                 }])
                 ->get();
         }
@@ -130,7 +130,7 @@ class MenuService
                 'items' => [
                     [
                         'name' => 'Akuntansi',
-                        'icon' => 'bi-calculator',
+                        'icon' => 'bi-file-earmark-spreadsheet',
                         'url' => '#',
                         'children' => [
                             ['name' => 'Aturan Kebijakan', 'route' => 'akuntansi.aturan-kebijakan.index'],
@@ -142,12 +142,15 @@ class MenuService
                     ],
                     [
                         'name' => 'Anggaran',
-                        'icon' => 'bi-cash-stack',
+                        'icon' => 'bi-currency-dollar',
                         'url' => '#',
                         'children' => [
                             ['name' => 'Aturan Kebijakan', 'route' => 'anggaran.aturan-kebijakan.index'],
                             ['name' => 'Dokumen RRA', 'route' => 'anggaran.dokumen-rra.index'],
                             ['name' => 'Laporan PRBC', 'route' => 'anggaran.laporan-prbc.index'],
+                            ['name' => 'Rencana Kerja Direktorat', 'route' => 'anggaran.rencana-kerja-direktorat.index'],
+                            ['name' => 'Rencana Kerja Tahunan', 'route' => 'anggaran.rencana-kerja-tahunan.index'],
+                            ['name' => 'Rencana Kerja Triwulan', 'route' => 'anggaran.rencana-kerja-triwulan.index'],
                         ]
                     ],
                     [
@@ -158,6 +161,14 @@ class MenuService
                             ['name' => 'Kajian Hukum', 'route' => 'hukum-kepatuhan.kajian-hukum.index'],
                             ['name' => 'Legal Memo', 'route' => 'hukum-kepatuhan.legal-memo.index'],
                             ['name' => 'Kontrak', 'route' => 'hukum-kepatuhan.kontrak.index'],
+                            ['name' => 'Putusan', 'route' => 'hukum-kepatuhan.putusan.index'],
+                            ['name' => 'Regulasi Internal', 'route' => 'hukum-kepatuhan.regulasi-internal.index'],
+                            ['name' => 'Regulasi External', 'route' => 'hukum-kepatuhan.regulasi-external.index'],
+                            ['name' => 'Compliance Check', 'route' => 'hukum-kepatuhan.compliance-check.index'],
+                            ['name' => 'Executive Summary', 'route' => 'hukum-kepatuhan.executive-summary.index'],
+                            ['name' => 'Lembar Keputusan', 'route' => 'hukum-kepatuhan.lembar-keputusan.index'],
+                            ['name' => 'Lembar Rekomendasi', 'route' => 'hukum-kepatuhan.lembar-rekomendasi.index'],
+                            ['name' => 'Penomoran', 'route' => 'hukum-kepatuhan.penomoran.index'],
                         ]
                     ],
                     [
@@ -167,6 +178,10 @@ class MenuService
                         'children' => [
                             ['name' => 'Transaksi', 'route' => 'investasi.transaksi.index'],
                             ['name' => 'Surat', 'route' => 'investasi.surat.index'],
+                            ['name' => 'Perencanaan Transaksi', 'route' => 'investasi.perencanaan-transaksi.index'],
+                            ['name' => 'Perencanaan Surat', 'route' => 'investasi.perencanaan-surat.index'],
+                            ['name' => 'Propensa Transaksi', 'route' => 'investasi.propensa-transaksi.index'],
+                            ['name' => 'Propensa Surat', 'route' => 'investasi.propensa-surat.index'],
                         ]
                     ],
                     [
@@ -176,7 +191,11 @@ class MenuService
                         'children' => [
                             ['name' => 'Surat Bayar', 'route' => 'keuangan.surat-bayar.index'],
                             ['name' => 'SPB', 'route' => 'keuangan.spb.index'],
+                            ['name' => 'SPPB', 'route' => 'keuangan.sppb.index'],
                             ['name' => 'Cashflow', 'route' => 'keuangan.cashflow.index'],
+                            ['name' => 'Penempatan', 'route' => 'keuangan.penempatan.index'],
+                            ['name' => 'Pemindahbukuan', 'route' => 'keuangan.pemindahbukuan.index'],
+                            ['name' => 'Pajak', 'route' => 'keuangan.pajak.index'],
                         ]
                     ],
                     [
@@ -185,8 +204,18 @@ class MenuService
                         'url' => '#',
                         'children' => [
                             ['name' => 'PKS', 'route' => 'sdm.pks.index'],
+                            ['name' => 'Rarus', 'route' => 'sdm.rarus.index'],
                             ['name' => 'Peraturan', 'route' => 'sdm.peraturan.index'],
+                            ['name' => 'Rekrut Masuk', 'route' => 'sdm.rekrut-masuk.index'],
+                            ['name' => 'Capeg Pegrus', 'route' => 'sdm.capeg-pegrus.index'],
+                            ['name' => 'Promosi Mutasi', 'route' => 'sdm.promosi-mutasi.index'],
+                            ['name' => 'Naik Gaji', 'route' => 'sdm.naik-gaji.index'],
+                            ['name' => 'Penghargaan', 'route' => 'sdm.penghargaan.index'],
+                            ['name' => 'Ikut Organisasi', 'route' => 'sdm.ikut-organisasi.index'],
                             ['name' => 'Surat Masuk', 'route' => 'sdm.surat-masuk.index'],
+                            ['name' => 'Surat Keluar', 'route' => 'sdm.surat-keluar.index'],
+                            ['name' => 'Aspurjab', 'route' => 'sdm.aspurjab.index'],
+                            ['name' => 'Rekon', 'route' => 'sdm.rekon.index'],
                         ]
                     ],
                     [
@@ -197,6 +226,10 @@ class MenuService
                             ['name' => 'Risalah Rapat', 'route' => 'sekretariat.risalah-rapat.index'],
                             ['name' => 'Materi', 'route' => 'sekretariat.materi.index'],
                             ['name' => 'Laporan', 'route' => 'sekretariat.laporan.index'],
+                            ['name' => 'Surat', 'route' => 'sekretariat.surat.index'],
+                            ['name' => 'Pengadaan', 'route' => 'sekretariat.pengadaan.index'],
+                            ['name' => 'Remunerasi Pedoman', 'route' => 'sekretariat.remunerasi-pedoman.index'],
+                            ['name' => 'Remunerasi Dokumen', 'route' => 'sekretariat.remunerasi-dokumen.index'],
                         ]
                     ],
                     [
@@ -205,7 +238,16 @@ class MenuService
                         'url' => '#',
                         'children' => [
                             ['name' => 'Procurement', 'route' => 'logistik.procurement.index'],
+                            ['name' => 'Cleaning Service', 'route' => 'logistik.cleaning-service.index'],
                             ['name' => 'Keamanan', 'route' => 'logistik.keamanan.index'],
+                            ['name' => 'Kendaraan', 'route' => 'logistik.kendaraan.index'],
+                            ['name' => 'Sarana Penunjang', 'route' => 'logistik.sarana-penunjang.index'],
+                            ['name' => 'Pelaporan PRBC', 'route' => 'logistik.pelaporan-prbc.index'],
+                            ['name' => 'User Satisfaction', 'route' => 'logistik.user-satisfaction.index'],
+                            ['name' => 'Vendor Satisfaction', 'route' => 'logistik.vendor-satisfaction.index'],
+                            ['name' => 'SMK3', 'route' => 'logistik.smk3.index'],
+                            ['name' => 'Polis Asuransi', 'route' => 'logistik.polis-asuransi.index'],
+                            ['name' => 'Jaminan', 'route' => 'logistik.jaminan.index'],
                         ]
                     ],
                 ]
@@ -227,9 +269,30 @@ class MenuService
                 ]
             ],
             [
+                'section' => 'Admin',
+                'admin_only' => true,
+                'items' => [
+                    [
+                        'name' => 'Manajemen Akses',
+                        'icon' => 'bi-shield-lock',
+                        'url' => '#',
+                        'children' => [
+                            ['name' => 'Menu', 'route' => 'admin.menus.index'],
+                            ['name' => 'Role', 'route' => 'admin.roles.index'],
+                            ['name' => 'User', 'route' => 'admin.users.index'],
+                        ]
+                    ],
+                    [
+                        'name' => 'Document Assignment',
+                        'icon' => 'bi-folder-symlink',
+                        'route' => 'admin.document-assignment.index',
+                    ],
+                ]
+            ],
+            [
                 'section' => 'Manajemen',
                 'items' => [
-                    ['name' => 'Akses Dokumen', 'icon' => 'bi-key', 'route' => 'access.index', 'badge' => 'pending_access'],
+                    ['name' => 'Akses Dokumen', 'icon' => 'bi-clipboard-check', 'route' => 'access.index', 'badge' => 'pending_access'],
                     ['name' => 'Permintaan Saya', 'icon' => 'bi-file-earmark-lock', 'route' => 'access.my-requests'],
                 ]
             ],

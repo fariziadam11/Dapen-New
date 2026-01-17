@@ -21,7 +21,7 @@ class User extends Authenticatable
         'password',
         'username',
         'nik',
-        'divisi',
+        'id_divisi',
         'valid_from',
         'valid_till',
         'is_active',
@@ -69,6 +69,14 @@ class User extends Authenticatable
     public function roles()
     {
         return $this->belongsToMany(BaseRole::class, 'base_user_roles', 'id_user', 'id_roles');
+    }
+
+    /**
+     * Get user division
+     */
+    public function divisi()
+    {
+        return $this->belongsTo(MasterDivisi::class, 'id_divisi', 'id');
     }
 
     /**

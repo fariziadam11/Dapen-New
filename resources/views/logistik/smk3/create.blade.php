@@ -1,1 +1,21 @@
-@include('logistik._form', ['subModule' => 'SMK3'])
+@extends('layouts.app')
+@section('title', 'Tambah SMK3')
+@section('breadcrumb')
+<li class="breadcrumb-item"><a href="#">Logistik</a></li>
+<li class="breadcrumb-item"><a href="{{ route('logistik.smk3.index') }}">SMK3</a></li>
+<li class="breadcrumb-item active">Tambah</li>
+@endsection
+@section('content')
+<div class="page-header mb-4"><h1 class="page-title">Tambah SMK3</h1></div>
+<div class="card"><div class="card-body">
+    <form action="{{ route('logistik.smk3.store') }}" method="POST" enctype="multipart/form-data" data-confirm="Apakah Anda yakin ingin menyimpan data ini?">
+        @csrf
+        @include('logistik.smk3._form', ['record' => null])
+        <hr class="my-4">
+        <div class="d-flex justify-content-between">
+            <a href="{{ route('logistik.smk3.index') }}" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Kembali</a>
+            <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg"></i> Simpan</button>
+        </div>
+    </form>
+</div></div>
+@endsection

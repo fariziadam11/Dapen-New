@@ -207,7 +207,14 @@ trait HasDocumentFeatures
      */
     protected function getSearchableFields()
     {
-        return ['judul', 'nomor', 'perihal', 'keterangan', 'file_name'];
+        // Define potential searchable fields
+        $potentialFields = ['judul', 'nomor', 'perihal', 'keterangan', 'file_name', 'nama', 'uraian'];
+
+        // Get actual columns from the table
+        $tableColumns = \Illuminate\Support\Facades\Schema::getColumnListing($this->getTable());
+
+        // Return only fields that actually exist in the table
+        return array_intersect($potentialFields, $tableColumns);
     }
 
     /**

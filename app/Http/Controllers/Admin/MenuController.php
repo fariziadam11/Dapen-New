@@ -12,7 +12,7 @@ class MenuController extends Controller
     public function index(Request $request)
     {
         $query = BaseMenu::with(['parent', 'module'])
-            ->orderBy('order_number');
+            ->orderBy('sequence');
 
         if ($request->filled('search')) {
             $query->where('menu_name', 'like', '%' . $request->search . '%');
@@ -25,7 +25,7 @@ class MenuController extends Controller
         }
 
         $menus = $query->paginate(20);
-        $parentMenus = BaseMenu::whereNull('parent_id')->orderBy('order_number')->get();
+        $parentMenus = BaseMenu::whereNull('parent_id')->orderBy('sequence')->get();
 
         return view('admin.menus.index', [
             'menus' => $menus,
@@ -35,8 +35,8 @@ class MenuController extends Controller
 
     public function create()
     {
-        $parentMenus = BaseMenu::whereNull('parent_id')->orderBy('order_number')->get();
-        $modules = BaseModule::orderBy('module_name')->get();
+        $parentMenus = BaseMenu::whereNull('parent_id')->orderBy('sequence')->get();
+        $modules = BaseModule::orderBy('name')->get();
 
         return view('admin.menus.create', [
             'parentMenus' => $parentMenus,
@@ -55,12 +55,12 @@ class MenuController extends Controller
             'route_name' => 'nullable|string|max:100',
             'icon' => 'nullable|string|max:50',
             'section_name' => 'nullable|string|max:50',
-            'order_number' => 'nullable|integer',
+            'sequence' => 'nullable|integer',
             'is_active' => 'boolean',
         ]);
 
         $validated['is_active'] = $request->boolean('is_active', true);
-        $validated['order_number'] = $validated['order_number'] ?? BaseMenu::max('order_number') + 1;
+        $validated['sequence'] = $validated['sequence'] ?? BaseMenu::max('sequence') + 1;
 
         BaseMenu::create($validated);
 
@@ -72,9 +72,9 @@ class MenuController extends Controller
     {
         $parentMenus = BaseMenu::whereNull('parent_id')
             ->where('id', '!=', $menu->id)
-            ->orderBy('order_number')
+            ->orderBy('sequence')
             ->get();
-        $modules = BaseModule::orderBy('module_name')->get();
+        $modules = BaseModule::orderBy('name')->get();
 
         return view('admin.menus.edit', [
             'menu' => $menu,
@@ -94,7 +94,7 @@ class MenuController extends Controller
             'route_name' => 'nullable|string|max:100',
             'icon' => 'nullable|string|max:50',
             'section_name' => 'nullable|string|max:50',
-            'order_number' => 'nullable|integer',
+            'sequence' => 'nullable|integer',
             'is_active' => 'boolean',
         ]);
 
@@ -124,7 +124,7 @@ class MenuController extends Controller
         $orders = $request->input('orders', []);
 
         foreach ($orders as $id => $order) {
-            BaseMenu::where('id', $id)->update(['order_number' => $order]);
+            BaseMenu::where('id', $id)->update(['sequence' => $order]);
         }
 
         return response()->json(['success' => true]);

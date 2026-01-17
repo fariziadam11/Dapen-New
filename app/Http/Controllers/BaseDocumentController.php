@@ -51,10 +51,10 @@ abstract class BaseDocumentController extends Controller
         $sortDirection = $request->get('direction', 'desc');
         $query->orderBy($sortField, $sortDirection);
 
-        $data = $query->with('divisi')->paginate(15);
+        $items = $query->with('divisi')->paginate(15);
 
         return view($this->viewPath . '.index', [
-            'data' => $data,
+            'items' => $items,
             'moduleName' => $this->moduleName,
             'routePrefix' => $this->routePrefix,
             'divisions' => $this->getUserDivisions(),
@@ -208,6 +208,37 @@ abstract class BaseDocumentController extends Controller
 
         return Storage::download($path, $record->file_name);
     }
+
+    /**
+     * Preview file inline (without forcing download)
+     */
+    public function preview($id)
+    {
+        $record = $this->model::findOrFail($id);
+        $this->authorizeAccess($record);
+
+        if (!$record->file) {
+            abort(404, 'File tidak ditemukan');
+        }
+
+        $path = $this->storagePath . '/' . $record->file;
+
+        if (!Storage::exists($path)) {
+            abort(404, 'File tidak ditemukan');
+        }
+
+        AuditLog::logDownload($record->getTable(), $record->id);
+
+        // Get file content and MIME type
+        $file = Storage::get($path);
+        $mimeType = Storage::mimeType($path);
+
+        // Return response with inline disposition
+        return response($file, 200)
+            ->header('Content-Type', $mimeType)
+            ->header('Content-Disposition', 'inline; filename="' . $record->file_name . '"');
+    }
+
 
     /**
      * Download specific version

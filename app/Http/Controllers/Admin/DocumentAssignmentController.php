@@ -142,14 +142,29 @@ class DocumentAssignmentController extends Controller
             ->whereNull("{$table}.deleted_at")
             ->select([
                 "{$table}.id",
-                "{$table}.judul",
-                "{$table}.perihal",
-                "{$table}.nomor",
-                "{$table}.tanggal",
                 "{$table}.id_divisi",
                 "{$table}.sifat_dokumen",
+                "{$table}.created_at",
                 'master_divisi.nama_divisi',
             ]);
+
+        // Add optional columns if they exist
+        $columns = \Illuminate\Support\Facades\Schema::getColumnListing($table);
+        if (in_array('judul', $columns)) {
+            $query->addSelect("{$table}.judul");
+        }
+        if (in_array('perihal', $columns)) {
+            $query->addSelect("{$table}.perihal");
+        }
+        if (in_array('nomor', $columns)) {
+            $query->addSelect("{$table}.nomor");
+        }
+        if (in_array('tanggal', $columns)) {
+            $query->addSelect("{$table}.tanggal");
+        }
+        if (in_array('nama', $columns)) {
+            $query->addSelect("{$table}.nama");
+        }
 
         if ($divisionId) {
             if ($divisionId == -1) {
@@ -161,10 +176,19 @@ class DocumentAssignmentController extends Controller
         }
 
         if ($search) {
-            $query->where(function ($q) use ($table, $search) {
-                $q->where("{$table}.judul", 'like', "%{$search}%")
-                    ->orWhere("{$table}.perihal", 'like', "%{$search}%")
-                    ->orWhere("{$table}.nomor", 'like', "%{$search}%");
+            $query->where(function ($q) use ($table, $search, $columns) {
+                if (in_array('judul', $columns)) {
+                    $q->orWhere("{$table}.judul", 'like', "%{$search}%");
+                }
+                if (in_array('perihal', $columns)) {
+                    $q->orWhere("{$table}.perihal", 'like', "%{$search}%");
+                }
+                if (in_array('nomor', $columns)) {
+                    $q->orWhere("{$table}.nomor", 'like', "%{$search}%");
+                }
+                if (in_array('nama', $columns)) {
+                    $q->orWhere("{$table}.nama", 'like', "%{$search}%");
+                }
             });
         }
 

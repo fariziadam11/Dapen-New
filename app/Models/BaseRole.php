@@ -38,6 +38,14 @@ class BaseRole extends Model
     }
 
     /**
+     * Get the division (alias for consistency)
+     */
+    public function divisi()
+    {
+        return $this->division();
+    }
+
+    /**
      * Get user roles
      */
     public function userRoles()

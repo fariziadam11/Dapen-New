@@ -92,7 +92,7 @@ class RoleController extends Controller
     {
         $menus = BaseMenu::with('children')
             ->whereNull('parent_id')
-            ->orderBy('order_number')
+            ->orderBy('sequence')
             ->get();
 
         $functions = BaseFunction::all();

@@ -1,0 +1,62 @@
+{{-- Form fields for Transaksi Investasi --}}
+<div class="row">
+    <div class="col-md-6 mb-3">
+        <label class="form-label">Divisi</label>
+        <select name="id_divisi" class="form-select">
+            <option value="">Pilih Divisi</option>
+            @foreach($divisions ?? [] as $divisi)
+                <option value="{{ $divisi->id }}" {{ old('id_divisi', $record->id_divisi ?? '') == $divisi->id ? 'selected' : '' }}>{{ $divisi->nama_divisi }}</option>
+            @endforeach
+        </select>
+    </div>
+    <div class="col-md-6 mb-3">
+    <label class="form-label">Tipe <span class="text-danger">*</span></label>
+    <select name="type" class="form-select @error('type') is-invalid @enderror" required>
+        <option value="">Pilih Tipe</option>
+        <option value="1" {{ old('type', $record->type ?? '') == 1 ? 'selected' : '' }}>Pembelian</option>
+        <option value="2" {{ old('type', $record->type ?? '') == 2 ? 'selected' : '' }}>Penjualan</option>
+    </select>
+    @error('type')<div class="invalid-feedback">{{ $message }}</div>@enderror
+</div>
+<div class="col-md-6 mb-3">
+    <label class="form-label">Tanggal Transaksi </label>
+    <input type="date" name="tgl_transaksi" class="form-control @error('tgl_transaksi') is-invalid @enderror" value="{{ old('tgl_transaksi', $record->tgl_transaksi ?? '') }}" >
+    @error('tgl_transaksi')<div class="invalid-feedback">{{ $message }}</div>@enderror
+</div>
+<div class="col-md-6 mb-3">
+    <label class="form-label">Perihal </label>
+    <input type="text" name="perihal" class="form-control @error('perihal') is-invalid @enderror" value="{{ old('perihal', $record->perihal ?? '') }}" >
+    @error('perihal')<div class="invalid-feedback">{{ $message }}</div>@enderror
+</div>
+<div class="col-md-6 mb-3">
+    <label class="form-label">Saham </label>
+    <input type="text" name="saham" class="form-control @error('saham') is-invalid @enderror" value="{{ old('saham', $record->saham ?? '') }}" >
+    @error('saham')<div class="invalid-feedback">{{ $message }}</div>@enderror
+</div>
+<div class="col-md-6 mb-3">
+    <label class="form-label">Broker </label>
+    <input type="text" name="broker" class="form-control @error('broker') is-invalid @enderror" value="{{ old('broker', $record->broker ?? '') }}" >
+    @error('broker')<div class="invalid-feedback">{{ $message }}</div>@enderror
+</div>
+<div class="col-md-6 mb-3">
+    <label class="form-label">Keterangan </label>
+    <textarea name="keterangan" class="form-control @error('keterangan') is-invalid @enderror" rows="3" >{{ old('keterangan', $record->keterangan ?? '') }}</textarea>
+    @error('keterangan')<div class="invalid-feedback">{{ $message }}</div>@enderror
+</div>
+
+    <div class="col-md-6 mb-3">
+        <label class="form-label">Sifat Dokumen</label>
+        <select name="sifat_dokumen" class="form-select">
+            <option value="Umum" {{ old('sifat_dokumen', $record->sifat_dokumen ?? 'Umum') == 'Umum' ? 'selected' : '' }}>Umum</option>
+            <option value="Rahasia" {{ old('sifat_dokumen', $record->sifat_dokumen ?? '') == 'Rahasia' ? 'selected' : '' }}>Rahasia</option>
+        </select>
+    </div>
+    <div class="col-12 mb-3">
+        <label class="form-label">File Dokumen</label>
+        <input type="file" name="file" class="form-control @error('file') is-invalid @enderror">
+        @if(isset($record) && $record->file_name)
+            <div class="mt-2"><small class="text-muted">File saat ini: {{ $record->file_name }}</small></div>
+        @endif
+        @error('file')<div class="invalid-feedback">{{ $message }}</div>@enderror
+    </div>
+</div>

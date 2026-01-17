@@ -5,14 +5,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    @if (session('success'))
+        <meta name="success-message" content="{{ session('success') }}">
+    @endif
+    @if (session('error'))
+        <meta name="error-message" content="{{ session('error') }}">
+    @endif
+    @if (session('warning'))
+        <meta name="warning-message" content="{{ session('warning') }}">
+    @endif
     <title>@yield('title', 'DMS Dapen') - Document Management System</title>
 
     <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet">
     <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="{{ asset('assets/css/bootstrap-icons-custom.css') }}" rel="stylesheet">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- SweetAlert2 -->
+    <link href="{{ asset('assets/css/sweetalert2.min.css') }}" rel="stylesheet">
+
+    @stack('styles')
 
     <style>
         :root {
@@ -174,6 +187,116 @@
             padding: 24px;
         }
 
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .breadcrumb {
+            background: none;
+            padding: 0;
+            margin: 0;
+            font-size: 0.875rem;
+        }
+
+        .breadcrumb-item+.breadcrumb-item::before {
+            color: #94a3b8;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .header-search {
+            position: relative;
+            width: 300px;
+        }
+
+        .header-search i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+        }
+
+        .header-search input {
+            padding-left: 40px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .notification-btn {
+            position: relative;
+            background: none;
+            border: none;
+            padding: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .notification-btn:hover {
+            background: #f1f5f9;
+        }
+
+        .notification-btn .badge {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            font-size: 0.65rem;
+            padding: 2px 5px;
+        }
+
+        .user-dropdown {
+            position: relative;
+        }
+
+        .user-dropdown .dropdown-toggle {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: none;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .user-dropdown .dropdown-toggle:hover {
+            background: #f1f5f9;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .user-dropdown .dropdown-menu {
+            min-width: 200px;
+            margin-top: 8px;
+            border: none;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        @media (max-width: 768px) {
+            .header-search {
+                display: none;
+            }
+        }
+
         .page-title {
             font-size: 1.5rem;
             font-weight: 600;
@@ -257,7 +380,14 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- jQuery (required for Select2) -->
+    <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
+    <!-- Bootstrap 5 JS -->
+    <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
+    <!-- SweetAlert2 -->
+    <script src="{{ asset('assets/js/sweetalert2.all.min.js') }}"></script>
+    <!-- SweetAlert Helper -->
+    <script src="{{ asset('assets/js/sweetalert-helper.js') }}"></script>
     <script>
         document.querySelectorAll('.nav-item.has-submenu > .nav-link').forEach(link => {
             link.addEventListener('click', function(e) {
@@ -274,6 +404,11 @@
             }
         });
     </script>
+
+    <!-- File Preview Modal -->
+    @include('components.file-preview-modal')
+    <script src="{{ asset('assets/js/file-preview.js') }}"></script>
+
     @stack('scripts')
 </body>
 
