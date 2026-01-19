@@ -114,6 +114,14 @@ class JabatanController extends Controller
             ->with('success', 'Jabatan berhasil dihapus.');
     }
 
+    public function show($id)
+    {
+        $record = MasterJabatan::with(['divisi', 'department', 'defaultRole'])->findOrFail($id);
+        $routePrefix = 'master.jabatan';
+        $moduleName = 'Master Jabatan';
+        return view('master.jabatan.show', compact('record', 'routePrefix', 'moduleName'));
+    }
+
     /**
      * Get departments by division (AJAX)
      */

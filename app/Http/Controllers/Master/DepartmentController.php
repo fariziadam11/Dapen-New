@@ -16,7 +16,7 @@ class DepartmentController extends Controller
 
     public function index(Request $request)
     {
-        $query = MasterDepartment::with('divisi');
+        $query = MasterDepartment::query();
 
         if ($request->filled('search')) {
             $search = $request->search;
@@ -26,24 +26,18 @@ class DepartmentController extends Controller
             });
         }
 
-        if ($request->filled('id_divisi')) {
-            $query->where('id_divisi', $request->id_divisi);
-        }
-
         $data = $query->orderBy('kode_department')->paginate(15);
-        $divisions = MasterDivisi::orderBy('nama_divisi')->get();
         $routePrefix = 'master.department';
         $moduleName = 'Master Department';
 
-        return view('master.department.index', compact('data', 'divisions', 'routePrefix', 'moduleName'));
+        return view('master.department.index', compact('data', 'routePrefix', 'moduleName'));
     }
 
     public function create()
     {
-        $divisions = MasterDivisi::orderBy('nama_divisi')->get();
         $routePrefix = 'master.department';
         $moduleName = 'Master Department';
-        return view('master.department.create', compact('divisions', 'routePrefix', 'moduleName'));
+        return view('master.department.create', compact('routePrefix', 'moduleName'));
     }
 
     public function store(Request $request)
@@ -51,7 +45,6 @@ class DepartmentController extends Controller
         $validated = $request->validate([
             'kode_department' => 'required|string|max:20|unique:master_department,kode_department',
             'nama_department' => 'required|string|max:100',
-            'id_divisi' => 'nullable|exists:master_divisi,id',
             'description' => 'nullable|string',
         ]);
 
@@ -62,13 +55,20 @@ class DepartmentController extends Controller
             ->with('success', 'Department berhasil ditambahkan.');
     }
 
+    public function show($id)
+    {
+        $record = MasterDepartment::with('divisions')->findOrFail($id);
+        $routePrefix = 'master.department';
+        $moduleName = 'Master Department';
+        return view('master.department.show', compact('record', 'routePrefix', 'moduleName'));
+    }
+
     public function edit($id)
     {
         $record = MasterDepartment::findOrFail($id);
-        $divisions = MasterDivisi::orderBy('nama_divisi')->get();
         $routePrefix = 'master.department';
         $moduleName = 'Master Department';
-        return view('master.department.edit', compact('record', 'divisions', 'routePrefix', 'moduleName'));
+        return view('master.department.edit', compact('record', 'routePrefix', 'moduleName'));
     }
 
     public function update(Request $request, $id)
@@ -78,7 +78,6 @@ class DepartmentController extends Controller
         $validated = $request->validate([
             'kode_department' => 'required|string|max:20|unique:master_department,kode_department,' . $id,
             'nama_department' => 'required|string|max:100',
-            'id_divisi' => 'nullable|exists:master_divisi,id',
             'description' => 'nullable|string',
         ]);
 

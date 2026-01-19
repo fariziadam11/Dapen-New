@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Master;
 
 use App\Http\Controllers\Controller;
 use App\Models\MasterDivisi;
+use App\Models\MasterDepartment;
 use App\Models\BaseModule;
 use Illuminate\Http\Request;
 
@@ -16,7 +17,7 @@ class DivisiController extends Controller
 
     public function index(Request $request)
     {
-        $query = MasterDivisi::with('module');
+        $query = MasterDivisi::with(['module', 'department']);
 
         if ($request->filled('search')) {
             $search = $request->search;
@@ -36,9 +37,10 @@ class DivisiController extends Controller
     public function create()
     {
         $modules = BaseModule::all();
+        $departments = MasterDepartment::orderBy('nama_department')->get();
         $routePrefix = 'master.divisi';
         $moduleName = 'Master Divisi';
-        return view('master.divisi.create', compact('modules', 'routePrefix', 'moduleName'));
+        return view('master.divisi.create', compact('modules', 'departments', 'routePrefix', 'moduleName'));
     }
 
     public function store(Request $request)
@@ -46,6 +48,7 @@ class DivisiController extends Controller
         $validated = $request->validate([
             'kode_divisi' => 'required|string|max:20|unique:master_divisi,kode_divisi',
             'nama_divisi' => 'required|string|max:100',
+            'id_department' => 'nullable|exists:master_department,id',
             'id_module' => 'nullable|exists:base_modules,id',
             'description' => 'nullable|string',
         ]);
@@ -59,7 +62,7 @@ class DivisiController extends Controller
 
     public function show($id)
     {
-        $record = MasterDivisi::with(['module', 'departments', 'jabatans', 'roles'])->findOrFail($id);
+        $record = MasterDivisi::with(['module', 'department', 'jabatans', 'roles'])->findOrFail($id);
         $routePrefix = 'master.divisi';
         $moduleName = 'Master Divisi';
         return view('master.divisi.show', compact('record', 'routePrefix', 'moduleName'));
@@ -69,9 +72,10 @@ class DivisiController extends Controller
     {
         $record = MasterDivisi::findOrFail($id);
         $modules = BaseModule::all();
+        $departments = MasterDepartment::orderBy('nama_department')->get();
         $routePrefix = 'master.divisi';
         $moduleName = 'Master Divisi';
-        return view('master.divisi.edit', compact('record', 'modules', 'routePrefix', 'moduleName'));
+        return view('master.divisi.edit', compact('record', 'modules', 'departments', 'routePrefix', 'moduleName'));
     }
 
     public function update(Request $request, $id)
@@ -81,6 +85,7 @@ class DivisiController extends Controller
         $validated = $request->validate([
             'kode_divisi' => 'required|string|max:20|unique:master_divisi,kode_divisi,' . $id,
             'nama_divisi' => 'required|string|max:100',
+            'id_department' => 'nullable|exists:master_department,id',
             'id_module' => 'nullable|exists:base_modules,id',
             'description' => 'nullable|string',
         ]);

@@ -26,6 +26,11 @@ Route::middleware(['auth'])->group(function () {
     // Dashboard
     Route::get('/dashboard', fn() => view('dashboard'))->name('dashboard');
 
+    // User Profile
+    Route::get('profile', [App\Http\Controllers\UserProfileController::class, 'index'])->name('profile.index');
+    Route::get('profile/edit', [App\Http\Controllers\UserProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('profile/update', [App\Http\Controllers\UserProfileController::class, 'update'])->name('profile.update');
+
     // Global Search
     Route::get('/search', [GlobalSearchController::class, 'search'])->name('search');
     Route::post('/search/request-access', [GlobalSearchController::class, 'requestAccess'])->name('search.request-access');
@@ -298,6 +303,7 @@ Route::middleware(['auth'])->group(function () {
     // ADMIN ROUTES
     // ======================
     Route::prefix('admin')->name('admin.')->group(function () {
+        Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
         Route::resource('menus', \App\Http\Controllers\Admin\MenuController::class);
         Route::post('menus/reorder', [\App\Http\Controllers\Admin\MenuController::class, 'reorder'])->name('menus.reorder');
         Route::resource('roles', \App\Http\Controllers\Admin\RoleController::class);
