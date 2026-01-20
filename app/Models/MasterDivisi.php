@@ -14,6 +14,7 @@ class MasterDivisi extends Model
     protected $fillable = [
         'kode_divisi',
         'nama_divisi',
+        'id_department', // Added
         'id_module',
         'description',
         'created_by',
@@ -30,11 +31,11 @@ class MasterDivisi extends Model
     }
 
     /**
-     * Get departments in this division
+     * Get the department
      */
-    public function departments()
+    public function department()
     {
-        return $this->hasMany(MasterDepartment::class, 'id_divisi');
+        return $this->belongsTo(MasterDepartment::class, 'id_department');
     }
 
     /**

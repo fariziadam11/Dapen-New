@@ -35,7 +35,9 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Nama</th>
+                        <th>NIK</th>
+                        <th>Display Name</th>
+                        <th>Login Username</th>
                         <th>Email</th>
                         <th>Divisi</th>
                         <th>Role</th>
@@ -46,7 +48,9 @@
                     @forelse($users as $i => $user)
                         <tr>
                             <td>{{ $users->firstItem() + $i }}</td>
+                            <td><span class="badge bg-secondary">{{ $user->nik ?? '-' }}</span></td>
                             <td><strong>{{ $user->name }}</strong></td>
+                            <td>{{ $user->username ?? '-' }}</td>
                             <td>{{ $user->email }}</td>
                             <td>
                                 @if ($user->divisi)
