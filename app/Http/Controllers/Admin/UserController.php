@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\MasterDivisi;
+use App\Models\MasterDepartment;
+use App\Models\MasterJabatan;
 use App\Models\BaseRole;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -13,7 +15,7 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        $query = User::with(['divisi', 'roles']);
+        $query = User::with(['divisi', 'department', 'jabatan', 'roles']);
 
         if ($request->filled('search')) {
             $query->where(function ($q) use ($request) {
@@ -40,6 +42,32 @@ class UserController extends Controller
         return view('admin.users.create', compact('divisions', 'roles'));
     }
 
+    public function getDepartments($divisiId)
+    {
+        // Since Divisi belongsTo Department, selecting a Divisi determines the Department.
+        // We find the division and return its parent department.
+        $divisi = MasterDivisi::with('department')->find($divisiId);
+
+        if ($divisi && $divisi->department) {
+            return response()->json([
+                [
+                    'id' => $divisi->department->id,
+                    'nama_department' => $divisi->department->nama_department
+                ]
+            ]);
+        }
+
+        return response()->json([]);
+    }
+
+    public function getJabatans($divisiId)
+    {
+        $jabatans = MasterJabatan::where('id_divisi', $divisiId)
+            ->orderBy('nama_jabatan')
+            ->get(['id', 'nama_jabatan']);
+        return response()->json($jabatans);
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -49,8 +77,8 @@ class UserController extends Controller
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:8|confirmed',
             'id_divisi' => 'nullable|exists:master_divisi,id',
-            'roles' => 'nullable|array',
-            'roles.*' => 'exists:base_roles,id',
+            'id_department' => 'nullable|exists:master_department,id',
+            'id_jabatan' => 'nullable|exists:master_jabatan,id',
         ]);
 
         $user = User::create([
@@ -60,11 +88,17 @@ class UserController extends Controller
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
             'id_divisi' => $validated['id_divisi'] ?? null,
+            'id_department' => $validated['id_department'] ?? null,
+            'id_jabatan' => $validated['id_jabatan'] ?? null,
             'is_active' => 1,
         ]);
 
-        if (!empty($validated['roles'])) {
-            $user->roles()->sync($validated['roles']);
+        // Auto assign role from Jabatan
+        if (!empty($validated['id_jabatan'])) {
+            $jabatan = MasterJabatan::find($validated['id_jabatan']);
+            if ($jabatan && $jabatan->id_role_default) {
+                 $user->roles()->sync([$jabatan->id_role_default]);
+            }
         }
 
         // Create User Profile
@@ -84,7 +118,8 @@ class UserController extends Controller
             'first_name' => $firstName,
             'last_name' => $lastName,
             'divisi' => $divisiName,
-            'email' => $validated['email'], // Assuming we want to sync email to profile too if column exists (it doesn't in migration viewed earlier, but let's check. Migration said keys: nik, divisi, department... phone, twitter... no email in profile table shown earlier. User table has email. Profile has phone, address etc. Let's omit email from profile).
+            'department' => $validated['id_department'] ? MasterDepartment::find($validated['id_department'])->nama_department : null,
+            'email' => $validated['email'],
         ]);
 
         return redirect()->route('admin.users.index')->with('success', 'User berhasil ditambahkan');
@@ -100,10 +135,23 @@ class UserController extends Controller
     public function edit(User $user)
     {
         $divisions = MasterDivisi::orderBy('nama_divisi')->get();
-        $roles = BaseRole::orderBy('roles_name')->get();
+        // Load Depts and Jabatans based on current user selection for the view
+        $departments = [];
+        $jabatans = [];
+
+        if ($user->id_divisi) {
+             // Get parent department
+             $divisi = MasterDivisi::with('department')->find($user->id_divisi);
+             if ($divisi && $divisi->department) {
+                 $departments = [$divisi->department];
+             }
+             // Get jabatans in division
+             $jabatans = MasterJabatan::where('id_divisi', $user->id_divisi)->orderBy('nama_jabatan')->get();
+        }
+
         $user->load('roles');
 
-        return view('admin.users.edit', compact('user', 'divisions', 'roles'));
+        return view('admin.users.edit', compact('user', 'divisions', 'departments', 'jabatans'));
     }
 
     public function update(Request $request, User $user)
@@ -115,8 +163,8 @@ class UserController extends Controller
             'email' => 'required|email|unique:users,email,' . $user->id,
             'password' => 'nullable|min:8|confirmed',
             'id_divisi' => 'nullable|exists:master_divisi,id',
-            'roles' => 'nullable|array',
-            'roles.*' => 'exists:base_roles,id',
+            'id_department' => 'nullable|exists:master_department,id',
+            'id_jabatan' => 'nullable|exists:master_jabatan,id',
         ]);
 
         $user->update([
@@ -125,26 +173,35 @@ class UserController extends Controller
             'nik' => $validated['nik'],
             'email' => $validated['email'],
             'id_divisi' => $validated['id_divisi'] ?? null,
+            'id_department' => $validated['id_department'] ?? null,
+            'id_jabatan' => $validated['id_jabatan'] ?? null,
         ]);
 
         if (!empty($validated['password'])) {
             $user->update(['password' => Hash::make($validated['password'])]);
         }
 
-        if (isset($validated['roles'])) {
-            $user->roles()->sync($validated['roles']);
+        // Auto assign role from Jabatan if changed
+        if (!empty($validated['id_jabatan']) && $validated['id_jabatan'] != $user->getOriginal('id_jabatan')) {
+            $jabatan = MasterJabatan::find($validated['id_jabatan']);
+             if ($jabatan && $jabatan->id_role_default) {
+                 $user->roles()->sync([$jabatan->id_role_default]);
+            }
         }
 
-        // Update Profile NIK if exists
+        // Update Profile
         if ($user->profile) {
             $user->profile->update([
                 'nik' => $validated['nik'],
             ]);
-            // Also update division name if changed? Maybe better to leave it to the user profile edit, but for consistency:
-             if (!empty($validated['id_divisi'])) {
+
+            if (!empty($validated['id_divisi'])) {
                 $divisi = MasterDivisi::find($validated['id_divisi']);
-                $divisiName = $divisi ? $divisi->nama_divisi : null;
-                $user->profile->update(['divisi' => $divisiName]);
+                $user->profile->update(['divisi' => $divisi ? $divisi->nama_divisi : null]);
+            }
+             if (!empty($validated['id_department'])) {
+                $dept = MasterDepartment::find($validated['id_department']);
+                $user->profile->update(['department' => $dept ? $dept->nama_department : null]);
             }
         }
 

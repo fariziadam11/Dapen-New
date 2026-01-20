@@ -42,16 +42,15 @@
                         <th>Icon</th>
                         <th>Nama Menu</th>
                         <th>Parent</th>
-                        <th>Route</th>
-                        <th>Section</th>
-                        <th>Status</th>
+                        <th>Route / Path</th>
+
                         <th width="120">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($menus as $menu)
                         <tr>
-                            <td><span class="badge bg-secondary">{{ $menu->order_number }}</span></td>
+                            <td><span class="badge bg-secondary">{{ $menu->sequence }}</span></td>
                             <td><i class="bi {{ $menu->icon ?? 'bi-folder' }} fs-5"></i></td>
                             <td>
                                 <strong>{{ $menu->menu_name }}</strong>
@@ -60,15 +59,8 @@
                                 @endif
                             </td>
                             <td>{{ $menu->parent?->menu_name ?? '-' }}</td>
-                            <td><code>{{ $menu->route_name ?? ($menu->url ?? '-') }}</code></td>
-                            <td>{{ $menu->section_name ?? '-' }}</td>
-                            <td>
-                                @if ($menu->is_active)
-                                    <span class="badge bg-success">Aktif</span>
-                                @else
-                                    <span class="badge bg-danger">Nonaktif</span>
-                                @endif
-                            </td>
+                            <td><code>{{ $menu->code_name ?? ($menu->path ?? '-') }}</code></td>
+
                             <td>
                                 <div class="btn-group btn-group-sm">
                                     <a href="{{ route('admin.menus.edit', $menu) }}" class="btn btn-outline-warning"><i

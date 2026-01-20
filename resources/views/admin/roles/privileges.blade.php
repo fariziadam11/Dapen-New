@@ -41,7 +41,10 @@
 
         .function-badges {
             margin-left: 30px;
-            margin-top: 5px;
+            margin-top: 10px;
+            padding: 10px;
+            background: #f0f8ff;
+            border-left: 3px solid #007bff;
         }
 
         .function-badges .form-check-inline {
@@ -72,6 +75,13 @@
                 </div>
             </div>
             <div class="card-body">
+                {{-- Debug info --}}
+                <div class="alert alert-info mb-3">
+                    <strong>Debug Info:</strong>
+                    Total Functions: {{ $functions->count() }} |
+                    Total Parent Menus: {{ $menus->count() }} |
+                    Total Children: {{ $menus->sum(fn($m) => $m->children->count()) }}
+                </div>
                 <ul class="menu-tree">
                     @foreach ($menus as $menu)
                         <li class="menu-item {{ $menu->children->count() > 0 ? 'has-children' : '' }}">
@@ -99,15 +109,15 @@
                                                         {{ isset($currentPrivileges[$child->id]) ? 'checked' : '' }}>
                                                     <label class="form-check-label" for="menu{{ $child->id }}">
                                                         {{ $child->menu_name }}
-                                                        @if ($child->route_name)
-                                                            <small class="text-muted">({{ $child->route_name }})</small>
-                                                        @endif
                                                     </label>
                                                 </div>
                                             </div>
 
+                                            {{-- FUNCTION CHECKBOXES - DENGAN DEBUG STYLING --}}
                                             @if ($functions->count() > 0)
                                                 <div class="function-badges">
+                                                    <div class="text-primary mb-2">
+                                                        <small><strong>Functions:</strong></small></div>
                                                     @foreach ($functions as $func)
                                                         <div class="form-check form-check-inline">
                                                             <input class="form-check-input" type="checkbox"

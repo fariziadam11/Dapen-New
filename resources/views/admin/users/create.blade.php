@@ -70,15 +70,25 @@
                         </select>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label">Role</label>
-                        <select name="roles[]" class="form-select" id="roleSelect">
-                            <option value="">Pilih Role</option>
-                            @foreach ($roles as $role)
-                                <option value="{{ $role->id }}" {{ old('roles.0') == $role->id ? 'selected' : '' }}>
-                                    {{ $role->roles_name }}
-                                </option>
-                            @endforeach
+                        <label class="form-label">Department</label>
+                        <select name="id_department" id="id_department"
+                            class="form-select @error('id_department') is-invalid @enderror" disabled>
+                            <option value="">Pilih Divisi Terlebih Dahulu</option>
                         </select>
+                        @error('id_department')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Jabatan</label>
+                        <select name="id_jabatan" id="id_jabatan"
+                            class="form-select @error('id_jabatan') is-invalid @enderror" disabled>
+                            <option value="">Pilih Department Terlebih Dahulu</option>
+                        </select>
+                        <small class="text-muted">Role akan otomatis ditentukan berdasarkan jabatan yang dipilih.</small>
+                        @error('id_jabatan')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                 </div>
                 <hr class="my-4">
@@ -92,21 +102,46 @@
     </div>
 @endsection
 
-@push('styles')
-    <link href="{{ asset('assets/css/select2.min.css') }}" rel="stylesheet" />
-    <link href="{{ asset('assets/css/select2-bootstrap-5-theme.min.css') }}" rel="stylesheet" />
-@endpush
-
 @push('scripts')
-    <script src="{{ asset('assets/js/select2.min.js') }}"></script>
     <script>
         $(document).ready(function() {
-            $('#roleSelect').select2({
-                theme: 'bootstrap-5',
-                placeholder: 'Pilih role...',
-                allowClear: true,
-                width: '100%'
+            const divSelect = $('select[name="id_divisi"]');
+            const deptSelect = $('#id_department');
+            const jabSelect = $('#id_jabatan');
+
+            divSelect.change(function() {
+                const divId = $(this).val();
+                deptSelect.html('<option value="">Loading...</option>').prop('disabled', true);
+                jabSelect.html('<option value="">Loading...</option>').prop('disabled', true);
+
+                if (divId) {
+                    // Fetch Department (Parent)
+                    $.get(`/admin/users/ajax/departments/${divId}`, function(data) {
+                        let options = '<option value="">Pilih Department</option>';
+                        data.forEach(function(item) {
+                            options +=
+                                `<option value="${item.id}" selected>${item.nama_department}</option>`;
+                        });
+                        deptSelect.html(options).prop('disabled', false);
+                    });
+
+                    // Fetch Jabatans (Children of Divisi)
+                    $.get(`/admin/users/ajax/jabatans/${divId}`, function(data) {
+                        let options = '<option value="">Pilih Jabatan</option>';
+                        data.forEach(function(item) {
+                            options +=
+                                `<option value="${item.id}">${item.nama_jabatan}</option>`;
+                        });
+                        jabSelect.html(options).prop('disabled', false);
+                    });
+
+                } else {
+                    deptSelect.html('<option value="">Pilih Divisi Terlebih Dahulu</option>');
+                    jabSelect.html('<option value="">Pilih Divisi Terlebih Dahulu</option>');
+                }
             });
+
+            // Department change listener removed as it is auto-determined by Divisi
         });
     </script>
 @endpush

@@ -313,13 +313,32 @@ abstract class BaseDocumentController extends Controller
             return true;
         }
 
+        // Check if user has explicit approved request
+        // Use table name instead of class name for document_type
+        $hasApprovedRequest = \App\Models\FileAccessRequest::where('document_type', $record->getTable())
+            ->where('document_id', $record->id)
+            ->where('id_user', $user->id)
+            ->where('status', 'approved')
+            ->exists();
+
+        if ($hasApprovedRequest) {
+            return true;
+        }
+
         if (!$user->hasDivisionAccess($record->id_divisi)) {
             abort(403, 'Anda tidak memiliki akses ke dokumen ini.');
         }
 
         // Check if secret document requires special access
-        if ($record->isSecret() && !$user->isDivisionAdmin($record->id_divisi)) {
-            abort(403, 'Dokumen ini bersifat rahasia.');
+        // Staff from the SAME division can view secret documents
+        // Staff from OTHER divisions need explicit access request or be Division Admin
+        if ($record->isSecret()) {
+            $isOwnDivision = $user->id_divisi == $record->id_divisi;
+
+            // If not from own division and not division admin, need approved request
+            if (!$isOwnDivision && !$user->isDivisionAdmin($record->id_divisi) && !$hasApprovedRequest) {
+                abort(403, 'Dokumen ini bersifat rahasia.');
+            }
         }
 
         return true;

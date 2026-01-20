@@ -14,8 +14,8 @@ class SidebarComposer
     {
         $user = auth()->user();
 
-        // Use static menu for now (can switch to database-driven later)
-        $menuSections = MenuService::getStaticMenu();
+        // Get dynamic menu based on user roles and permissions
+        $menuSections = MenuService::getMenuForUser($user);
 
         // Filter sections based on user role
         $filteredSections = [];

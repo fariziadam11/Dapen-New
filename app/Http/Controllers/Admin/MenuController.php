@@ -48,18 +48,14 @@ class MenuController extends Controller
     {
         $validated = $request->validate([
             'menu_name' => 'required|string|max:100',
-            'menu_code' => 'nullable|string|max:50',
+            'code_name' => 'nullable|string|max:50',
             'parent_id' => 'nullable|exists:base_menus,id',
             'id_module' => 'nullable|exists:base_modules,id',
-            'url' => 'nullable|string|max:255',
-            'route_name' => 'nullable|string|max:100',
+            'path' => 'nullable|string|max:255',
             'icon' => 'nullable|string|max:50',
-            'section_name' => 'nullable|string|max:50',
             'sequence' => 'nullable|integer',
-            'is_active' => 'boolean',
         ]);
 
-        $validated['is_active'] = $request->boolean('is_active', true);
         $validated['sequence'] = $validated['sequence'] ?? BaseMenu::max('sequence') + 1;
 
         BaseMenu::create($validated);
@@ -87,18 +83,13 @@ class MenuController extends Controller
     {
         $validated = $request->validate([
             'menu_name' => 'required|string|max:100',
-            'menu_code' => 'nullable|string|max:50',
+            'code_name' => 'nullable|string|max:50',
             'parent_id' => 'nullable|exists:base_menus,id',
             'id_module' => 'nullable|exists:base_modules,id',
-            'url' => 'nullable|string|max:255',
-            'route_name' => 'nullable|string|max:100',
+            'path' => 'nullable|string|max:255',
             'icon' => 'nullable|string|max:50',
-            'section_name' => 'nullable|string|max:50',
             'sequence' => 'nullable|integer',
-            'is_active' => 'boolean',
         ]);
-
-        $validated['is_active'] = $request->boolean('is_active', true);
 
         $menu->update($validated);
 

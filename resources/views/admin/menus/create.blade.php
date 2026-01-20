@@ -26,10 +26,10 @@
                         @enderror
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label">Kode Menu</label>
-                        <input type="text" name="menu_code" class="form-control"
-                            value="{{ old('menu_code', $menu->menu_code ?? '') }}"
-                            placeholder="contoh: akuntansi.aturan-kebijakan">
+                        <label class="form-label">Kode / Route Name</label>
+                        <input type="text" name="code_name" class="form-control"
+                            value="{{ old('code_name', $menu->code_name ?? '') }}"
+                            placeholder="contoh: akuntansi.aturan-kebijakan.index">
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Parent Menu</label>
@@ -54,17 +54,11 @@
                         </select>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label">Route Name</label>
-                        <input type="text" name="route_name" class="form-control"
-                            value="{{ old('route_name', $menu->route_name ?? '') }}"
-                            placeholder="contoh: akuntansi.aturan-kebijakan.index">
+                        <label class="form-label">Path / URL</label>
+                        <input type="text" name="path" class="form-control"
+                            value="{{ old('path', $menu->path ?? '') }}" placeholder="contoh: /akuntansi/aturan-kebijakan">
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label">URL</label>
-                        <input type="text" name="url" class="form-control"
-                            value="{{ old('url', $menu->url ?? '') }}" placeholder="contoh: /akuntansi/aturan-kebijakan">
-                    </div>
-                    <div class="col-md-4">
                         <label class="form-label">Icon (Bootstrap Icons)</label>
                         <div class="input-group">
                             <span class="input-group-text"><i
@@ -75,23 +69,12 @@
                         <div class="form-text"><a href="https://icons.getbootstrap.com/" target="_blank">Lihat icon</a>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <label class="form-label">Section Name</label>
-                        <input type="text" name="section_name" class="form-control"
-                            value="{{ old('section_name', $menu->section_name ?? '') }}" placeholder="contoh: Modul">
-                    </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <label class="form-label">Urutan</label>
-                        <input type="number" name="order_number" class="form-control"
-                            value="{{ old('order_number', $menu->order_number ?? '') }}" min="1">
+                        <input type="number" name="sequence" class="form-control"
+                            value="{{ old('sequence', $menu->sequence ?? '') }}" min="1">
                     </div>
-                    <div class="col-12">
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" name="is_active" value="1" id="isActive"
-                                {{ old('is_active', $menu->is_active ?? 1) ? 'checked' : '' }}>
-                            <label class="form-check-label" for="isActive">Menu Aktif</label>
-                        </div>
-                    </div>
+
                 </div>
                 <hr class="my-4">
                 <div class="d-flex justify-content-between">

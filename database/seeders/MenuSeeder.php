@@ -50,9 +50,17 @@ class MenuSeeder extends Seeder
         $admin = $this->createMenu('admin', 'System Admin', 'System Admin', $seq++, '#', 'bi-gear');
         $this->createMenu('admin.menus', 'Menu', 'Menu', 1, '/admin/menus', null, $admin->id);
         $this->createMenu('admin.roles', 'Role', 'Role', 2, '/admin/roles', null, $admin->id);
+        $this->createMenu('admin.users', 'User', 'User', 3, '/admin/users', null, $admin->id);
+        $this->createMenu('admin.document-assignment', 'Document Assignment', 'Document Assignment', 4, '/admin/document-assignment', null, $admin->id);
 
         // Access Management
         $this->createMenu('access', 'Akses Dokumen', 'Akses Dokumen', $seq++, '/access', 'bi-key');
+
+        // My Documents (Approved Access)
+        $this->createMenu('my-documents', 'Dokumen Saya', 'Dokumen Saya', $seq++, '/my-documents', 'bi-folder');
+
+        // My Requests
+        $this->createMenu('access.my-requests', 'Permintaan Saya', 'Permintaan Saya', $seq++, '/access/my-requests', 'bi-file-earmark-lock');
 
         $this->command->info('✅ Menus seeded! Total: ' . BaseMenu::count());
     }
