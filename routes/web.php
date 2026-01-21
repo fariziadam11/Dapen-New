@@ -35,6 +35,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/search', [GlobalSearchController::class, 'search'])->name('search');
     Route::post('/search/request-access', [GlobalSearchController::class, 'requestAccess'])->name('search.request-access');
 
+    // My Documents (Approved Access)
+    Route::get('/my-documents', [\App\Http\Controllers\MyDocumentsController::class, 'index'])->name('my-documents.index');
+
     // File Access Management
     Route::prefix('access')->name('access.')->group(function () {
         Route::get('/', [FileAccessController::class, 'index'])->name('index');
@@ -304,6 +307,8 @@ Route::middleware(['auth'])->group(function () {
     // ======================
     Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
+        Route::get('users/ajax/departments/{divisiId}', [\App\Http\Controllers\Admin\UserController::class, 'getDepartments'])->name('users.ajax.departments');
+        Route::get('users/ajax/jabatans/{divisiId}', [\App\Http\Controllers\Admin\UserController::class, 'getJabatans'])->name('users.ajax.jabatans');
         Route::resource('menus', \App\Http\Controllers\Admin\MenuController::class);
         Route::post('menus/reorder', [\App\Http\Controllers\Admin\MenuController::class, 'reorder'])->name('menus.reorder');
         Route::resource('roles', \App\Http\Controllers\Admin\RoleController::class);

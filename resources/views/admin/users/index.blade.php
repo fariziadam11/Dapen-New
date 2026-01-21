@@ -38,8 +38,10 @@
                         <th>NIK</th>
                         <th>Display Name</th>
                         <th>Login Username</th>
-                        <th>Email</th>
+
                         <th>Divisi</th>
+                        <th>Department</th>
+                        <th>Jabatan</th>
                         <th>Role</th>
                         <th>Aksi</th>
                     </tr>
@@ -51,12 +53,24 @@
                             <td><span class="badge bg-secondary">{{ $user->nik ?? '-' }}</span></td>
                             <td><strong>{{ $user->name }}</strong></td>
                             <td>{{ $user->username ?? '-' }}</td>
-                            <td>{{ $user->email }}</td>
+
                             <td>
                                 @if ($user->divisi)
-                                    {{ $user->divisi->nama_divisi }}
-                                @elseif($user->id_divisi)
-                                    <span class="text-warning">ID: {{ $user->id_divisi }} (Divisi tidak ditemukan)</span>
+                                    <span class="badge bg-info">{{ $user->divisi->nama_divisi }}</span>
+                                @else
+                                    -
+                                @endif
+                            </td>
+                            <td>
+                                @if ($user->department)
+                                    <span class="badge bg-secondary">{{ $user->department->nama_department }}</span>
+                                @else
+                                    -
+                                @endif
+                            </td>
+                            <td>
+                                @if ($user->jabatan)
+                                    <span class="badge bg-success">{{ $user->jabatan->nama_jabatan }}</span>
                                 @else
                                     -
                                 @endif

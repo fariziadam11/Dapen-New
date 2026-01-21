@@ -64,7 +64,9 @@ class GlobalSearchController extends Controller
                     ->get();
 
                 foreach ($items as $item) {
-                    $hasAccess = $user->isSuperAdmin() || $user->hasDivisionAccess($item->id_divisi);
+                    $hasAccess = $user->isSuperAdmin()
+                        || $user->hasDivisionAccess($item->id_divisi)
+                        || $this->hasApprovedAccessRequest($user->id, $tableName, $item->id);
 
                     $results[] = [
                         'id' => $item->id,
@@ -138,6 +140,18 @@ class GlobalSearchController extends Controller
         }
 
         return null;
+    }
+
+    /**
+     * Check if user has approved access request for document
+     */
+    protected function hasApprovedAccessRequest($userId, $documentType, $documentId): bool
+    {
+        return \App\Models\FileAccessRequest::where('id_user', $userId)
+            ->where('document_type', $documentType)
+            ->where('document_id', $documentId)
+            ->where('status', 'approved')
+            ->exists();
     }
 
     /**

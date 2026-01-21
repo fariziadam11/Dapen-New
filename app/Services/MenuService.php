@@ -34,19 +34,18 @@ class MenuService
     {
         // Super admin gets all menus
         if ($user->isSuperAdmin()) {
-            $menus = BaseMenu::where('is_active', 1)
+            $menus = BaseMenu::query()
                 ->whereNull('parent_id')
                 ->orderBy('sequence')
                 ->with(['children' => function ($q) {
-                    $q->where('is_active', 1)->orderBy('sequence');
+                    $q->orderBy('sequence');
                 }])
                 ->get();
         } else {
             // Get menu IDs user has access to
             $allowedMenuIds = $user->getAllowedMenuIds();
 
-            $menus = BaseMenu::where('is_active', 1)
-                ->whereNull('parent_id')
+            $menus = BaseMenu::whereNull('parent_id')
                 ->where(function ($q) use ($allowedMenuIds) {
                     $q->whereIn('id', $allowedMenuIds)
                         ->orWhereHas('children', function ($sub) use ($allowedMenuIds) {
@@ -55,8 +54,7 @@ class MenuService
                 })
                 ->orderBy('sequence')
                 ->with(['children' => function ($q) use ($allowedMenuIds) {
-                    $q->where('is_active', 1)
-                        ->whereIn('id', $allowedMenuIds)
+                    $q->whereIn('id', $allowedMenuIds)
                         ->orderBy('sequence');
                 }])
                 ->get();
@@ -70,34 +68,52 @@ class MenuService
      */
     protected static function formatMenuItems($menus): array
     {
-        $result = [];
+        $items = [];
 
         foreach ($menus as $menu) {
+            $route = $menu->code_name;
+            // Append .index for resource routes (heuristic: contains dot)
+            if (strpos($route, '.') !== false && !str_ends_with($route, '.index')) {
+                $route .= '.index';
+            }
+
             $item = [
                 'id' => $menu->id,
                 'name' => $menu->menu_name,
                 'icon' => $menu->icon ?? 'bi-folder',
-                'url' => $menu->url,
-                'route' => $menu->route_name,
-                'section' => $menu->section_name,
+                'url' => $menu->path,
+                'route' => $route,
+                // 'section' => $menu->section_name, // Not used
                 'children' => [],
             ];
 
             if ($menu->children && $menu->children->count() > 0) {
                 foreach ($menu->children as $child) {
+                     $childRoute = $child->code_name;
+                     if (strpos($childRoute, '.') !== false && !str_ends_with($childRoute, '.index')) {
+                        $childRoute .= '.index';
+                    }
+
                     $item['children'][] = [
                         'id' => $child->id,
                         'name' => $child->menu_name,
-                        'url' => $child->url,
-                        'route' => $child->route_name,
+                        'url' => $child->path,
+                        'route' => $childRoute,
                     ];
                 }
             }
 
-            $result[] = $item;
+            $items[] = $item;
         }
 
-        return $result;
+        // Sidebar expects sections. Wrap all in one default section or split if needed.
+        // For now, simple wrapping.
+        return [
+            [
+                'section' => 'Main Menu',
+                'items' => $items
+            ]
+        ];
     }
 
     /**

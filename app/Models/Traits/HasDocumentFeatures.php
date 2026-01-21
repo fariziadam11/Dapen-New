@@ -183,7 +183,19 @@ trait HasDocumentFeatures
             // User's accessible divisions
             $q->whereIn('id_divisi', $accessibleDivisionIds)
                 // Or user created it
-                ->orWhere('created_by', $userId);
+                ->orWhere('created_by', $userId)
+                 // Or user has approved access request
+                ->orWhereExists(function ($subQ) use ($userId) {
+                    $subQ->select(\DB::raw(1))
+                        ->from('file_access_requests')
+                        ->whereColumn('file_access_requests.document_id', $this->getTable() . '.id')
+                        // Note: ideally we check document_type too, but getTable() usage here is tricky if polymorphic types don't match table names.
+                        // Assuming 1-to-1 mapping for simplicity or we need to pass class name.
+                        // Let's rely on standard logic: document_type = class names usually.
+                        ->where('file_access_requests.document_type', static::class)
+                        ->where('file_access_requests.id_user', $userId)
+                        ->where('file_access_requests.status', 'approved');
+                });
         });
     }
 

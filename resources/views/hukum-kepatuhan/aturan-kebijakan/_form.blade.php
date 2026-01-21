@@ -2,12 +2,17 @@
 <div class="row">
     <div class="col-md-6 mb-3">
         <label class="form-label">Divisi</label>
-        <select name="id_divisi" class="form-select">
-            <option value="">Pilih Divisi</option>
-            @foreach($divisions ?? [] as $divisi)
-                <option value="{{ $divisi->id }}" {{ old('id_divisi', $record->id_divisi ?? '') == $divisi->id ? 'selected' : '' }}>{{ $divisi->nama_divisi }}</option>
-            @endforeach
-        </select>
+        @if(auth()->user()->isSuperAdmin())
+            <select name="id_divisi" class="form-select">
+                <option value="">Pilih Divisi</option>
+                @foreach($divisions ?? [] as $divisi)
+                    <option value="{{ $divisi->id }}" {{ old('id_divisi', $record->id_divisi ?? '') == $divisi->id ? 'selected' : '' }}>{{ $divisi->nama_divisi }}</option>
+                @endforeach
+            </select>
+        @else
+            <input type="hidden" name="id_divisi" value="{{ auth()->user()->id_divisi }}">
+            <input type="text" class="form-control" value="{{ auth()->user()->divisi->nama_divisi ?? '' }}" readonly>
+        @endif
     </div>
     <div class="col-md-6 mb-3">
     <label class="form-label">Tanggal </label>

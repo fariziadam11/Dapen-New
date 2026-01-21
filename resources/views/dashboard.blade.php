@@ -34,23 +34,6 @@
                 <div class="card-body">
                     <div class="d-flex align-items-center">
                         <div class="flex-shrink-0">
-                            <div class="bg-success bg-opacity-10 rounded-3 p-3">
-                                <i class="bi bi-folder text-success fs-4"></i>
-                            </div>
-                        </div>
-                        <div class="flex-grow-1 ms-3">
-                            <h3 class="mb-0">{{ \App\Models\DocumentFolder::count() }}</h3>
-                            <small class="text-muted">Total Folder</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card h-100">
-                <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <div class="flex-shrink-0">
                             <div class="bg-warning bg-opacity-10 rounded-3 p-3">
                                 <i class="bi bi-clock-history text-warning fs-4"></i>
                             </div>

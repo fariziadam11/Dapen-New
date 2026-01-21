@@ -22,6 +22,8 @@ class User extends Authenticatable
         'username',
         'nik',
         'id_divisi',
+        'id_department',
+        'id_jabatan',
         'valid_from',
         'valid_till',
         'is_active',
@@ -61,6 +63,22 @@ class User extends Authenticatable
     public function userRoles()
     {
         return $this->hasMany(BaseUserRole::class, 'id_user');
+    }
+
+    /**
+     * Get user department
+     */
+    public function department()
+    {
+        return $this->belongsTo(MasterDepartment::class, 'id_department');
+    }
+
+    /**
+     * Get user jabatan
+     */
+    public function jabatan()
+    {
+        return $this->belongsTo(MasterJabatan::class, 'id_jabatan');
     }
 
     /**
@@ -181,6 +199,11 @@ class User extends Authenticatable
             return true;
         }
 
+        // User's own division
+        if ($this->id_divisi == $divisiId) {
+            return true;
+        }
+
         // Direct division role
         if ($this->roles()->where('id_divisi', $divisiId)->exists()) {
             return true;
@@ -202,6 +225,11 @@ class User extends Authenticatable
         }
 
         $divisionIds = [];
+
+        // User's own division
+        if ($this->id_divisi) {
+            $divisionIds[] = $this->id_divisi;
+        }
 
         // Direct division roles
         $divisionIds = array_merge(

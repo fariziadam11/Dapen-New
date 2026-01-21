@@ -26,6 +26,14 @@
                     <td>{{ $user->divisi->nama_divisi ?? '-' }}</td>
                 </tr>
                 <tr>
+                    <th>Department</th>
+                    <td>{{ $user->department->nama_department ?? '-' }}</td>
+                </tr>
+                <tr>
+                    <th>Jabatan</th>
+                    <td>{{ $user->jabatan->nama_jabatan ?? '-' }}</td>
+                </tr>
+                <tr>
                     <th>Role</th>
                     <td>
                         @foreach ($user->roles as $role)
