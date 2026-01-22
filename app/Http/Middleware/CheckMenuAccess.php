@@ -13,7 +13,6 @@ class CheckMenuAccess
     public function handle(Request $request, Closure $next, ?string $menuRoute = null)
     {
         $user = $request->user();
-
         if (!$user) {
             return redirect()->route('login');
         }
