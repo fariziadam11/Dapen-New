@@ -24,6 +24,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- SweetAlert2 -->
     <link href="{{ asset('assets/css/sweetalert2.min.css') }}" rel="stylesheet">
+    <!-- Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
     @stack('styles')
 
@@ -382,6 +384,8 @@
 
     <!-- jQuery (required for Select2) -->
     <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
+    <!-- Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <!-- Bootstrap 5 JS -->
     <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
     <!-- SweetAlert2 -->
