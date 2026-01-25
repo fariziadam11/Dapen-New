@@ -24,8 +24,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- SweetAlert2 -->
     <link href="{{ asset('assets/css/sweetalert2.min.css') }}" rel="stylesheet">
-    <!-- Select2 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <!-- Select2 -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css"
+        rel="stylesheet">
 
     @stack('styles')
 
@@ -368,8 +370,39 @@
                 margin-left: 0;
             }
         }
+
+        /* ===== SELECT2 DROPDOWN CARET (V ICON) ===== */
+        .select2-container--bootstrap-5 .select2-selection--multiple,
+        .select2-container--bootstrap-5 .select2-selection--single {
+            position: relative;
+            padding-right: 2.5rem;
+        }
+
+        /* caret icon */
+        .select2-container--bootstrap-5 .select2-selection--multiple::after,
+        .select2-container--bootstrap-5 .select2-selection--single::after {
+            content: '\F282';
+            /* bi-chevron-down */
+            font-family: 'bootstrap-icons';
+            position: absolute;
+            top: 50%;
+            right: 0.75rem;
+            transform: translateY(-50%);
+            font-size: 0.75em;
+            pointer-events: none;
+        }
+
+        /* rotate when open */
+        .select2-container--open .select2-selection--multiple::after,
+        .select2-container--open .select2-selection--single::after {
+            transform: translateY(-50%) rotate(180deg);
+        }
+
+        /* invalid state */
+        .select2-selection.is-invalid {
+            border-color: #dc3545 !important;
+        }
     </style>
-    @stack('styles')
 </head>
 
 <body>
@@ -384,10 +417,10 @@
 
     <!-- jQuery (required for Select2) -->
     <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
-    <!-- Select2 JS -->
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <!-- Bootstrap 5 JS -->
     <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
+    <!-- Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <!-- SweetAlert2 -->
     <script src="{{ asset('assets/js/sweetalert2.all.min.js') }}"></script>
     <!-- SweetAlert Helper -->
@@ -408,6 +441,21 @@
             }
         });
     </script>
+
+
+    <!-- GLOBAL INIT SELECT2 -->
+    <script>
+        $(document).ready(function() {
+            $('.select2').select2({
+                theme: 'bootstrap-5',
+                width: '100%',
+                placeholder: function() {
+                    return $(this).data('placeholder');
+                }
+            });
+        });
+    </script>
+
 
     <!-- File Preview Modal -->
     @include('components.file-preview-modal')

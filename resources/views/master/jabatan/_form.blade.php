@@ -1,5 +1,4 @@
 <div class="row">
-    {{-- Kode Jabatan --}}
     <div class="col-md-6 mb-3">
         <label class="form-label">Kode Jabatan <span class="text-danger">*</span></label>
         <input type="text" name="kode_jabatan" class="form-control @error('kode_jabatan') is-invalid @enderror"
@@ -8,8 +7,6 @@
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
-
-    {{-- Nama Jabatan --}}
     <div class="col-md-6 mb-3">
         <label class="form-label">Nama Jabatan <span class="text-danger">*</span></label>
         <input type="text" name="nama_jabatan" class="form-control @error('nama_jabatan') is-invalid @enderror"
@@ -18,42 +15,34 @@
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
-
-    {{-- Divisi --}}
     <div class="col-md-6 mb-3">
         <label class="form-label">Divisi</label>
         <select name="id_divisi" class="form-select @error('id_divisi') is-invalid @enderror">
             <option value="">Pilih Divisi</option>
-            @foreach ($divisions as $divisi)
+            @foreach ($divisions ?? [] as $divisi)
                 <option value="{{ $divisi->id }}"
                     {{ old('id_divisi', $record->id_divisi ?? '') == $divisi->id ? 'selected' : '' }}>
-                    {{ $divisi->nama_divisi }}
-                </option>
+                    {{ $divisi->nama_divisi }}</option>
             @endforeach
         </select>
         @error('id_divisi')
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
-
-    {{-- Department --}}
     <div class="col-md-6 mb-3">
         <label class="form-label">Department</label>
         <select name="id_department" class="form-select @error('id_department') is-invalid @enderror">
             <option value="">Pilih Department</option>
-            @foreach ($departments as $dept)
+            @foreach ($departments ?? [] as $dept)
                 <option value="{{ $dept->id }}"
                     {{ old('id_department', $record->id_department ?? '') == $dept->id ? 'selected' : '' }}>
-                    {{ $dept->nama_department }}
-                </option>
+                    {{ $dept->nama_department }}</option>
             @endforeach
         </select>
         @error('id_department')
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
-
-    {{-- Level Jabatan --}}
     <div class="col-md-6 mb-3">
         <label class="form-label">Level Jabatan</label>
         <select name="level_jabatan" class="form-select @error('level_jabatan') is-invalid @enderror">
@@ -71,40 +60,44 @@
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
-
-    <!-- DEFAULT ROLE -->
-    <div class="mb-3">
-        <label class="form-label">
-            Default Role <span class="text-danger">*</span>
-        </label>
-
-        <select name="id_role_default" class="form-select @error('id_role_default') is-invalid @enderror" required>
-            <option value="">Pilih Default Role</option>
-
-            @foreach ($roles as $role)
+    <div class="col-md-6 mb-3">
+        <label class="form-label">Default Role</label>
+        <select name="id_role_default" class="form-select @error('id_role_default') is-invalid @enderror">
+            <option value="">Pilih Role</option>
+            @foreach ($roles ?? [] as $role)
                 <option value="{{ $role->id }}"
                     {{ old('id_role_default', $record->id_role_default ?? '') == $role->id ? 'selected' : '' }}>
-                    {{ $role->name }}
-                </option>
+                    {{ $role->roles_name }}</option>
             @endforeach
         </select>
-
         @error('id_role_default')
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
+    @php
+        $defaultRoleId = old('id_role_default', $record->id_role_default ?? null);
 
-    {{-- ROLES MULTISELECT (PrimeVue-like) --}}
+        $selectedAdditionalRoles = collect(old('roles', $record?->roles?->pluck('id')->toArray() ?? []))
+            ->reject(fn($id) => $id == $defaultRoleId)
+            ->values()
+            ->toArray();
+    @endphp
+
     <div class="col-md-6 mb-3">
-        <label class="form-label">Roles Jabatan</label>
+        <label class="form-label">Additional Roles</label>
 
-        <select id="roles" name="roles[]" class="form-select" multiple>
+        <select name="roles[]" class="form-select select2" multiple data-placeholder="Pilih Additional Roles">
+
             @foreach ($roles as $role)
+                {{-- Jangan tampilkan default role --}}
+                @continue($role->id == $defaultRoleId)
+
                 <option value="{{ $role->id }}"
-                    {{ in_array($role->id, old('roles', $record?->roles?->pluck('id')->toArray() ?? [])) ? 'selected' : '' }}>
+                    {{ in_array($role->id, $selectedAdditionalRoles) ? 'selected' : '' }}>
                     {{ $role->roles_name }}
                 </option>
             @endforeach
+
         </select>
 
         @error('roles')
@@ -112,7 +105,7 @@
         @enderror
     </div>
 
-    {{-- Deskripsi --}}
+
     <div class="col-12 mb-3">
         <label class="form-label">Deskripsi</label>
         <textarea name="description" class="form-control @error('description') is-invalid @enderror" rows="3">{{ old('description', $record->description ?? '') }}</textarea>

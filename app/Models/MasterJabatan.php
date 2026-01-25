@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class MasterJabatan extends Model
 {
     use SoftDeletes;
@@ -53,6 +53,18 @@ class MasterJabatan extends Model
         return $this->belongsTo(BaseRole::class, 'id_role_default');
     }
 
+    /**
+     * Additional Roles (MULTI)
+     */
+    public function roles(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            BaseRole::class,
+            'base_masterjabatan_role',
+            'id_jabatan',
+            'id_role'
+        )->withTimestamps()->withPivot('deleted_at');
+    }
     /**
      * Get user jabatan history
      */
